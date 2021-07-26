@@ -1,12 +1,12 @@
 @import url(//fonts.googleapis.com/css?family=Ubuntu:500&subset=latin,latin-ext);
 
 body{
-	color: #2c3e50;
+	color: #000113;
 }
 
 table, th, td {
   border: 1px solid #ccc;
-  background-color: #e0dcdc;	
+  background-color: #F5F9FF;	
 }
 
 .sidebar {
@@ -79,7 +79,7 @@ article .share .facebook:hover {
 }
 article .share .gplus:hover {
 	color: #C13929;
-	border-color: #C13929;
+	border-color: #2970C1;
 }
 
 #contact-list-secondary {
@@ -135,7 +135,7 @@ article.home h1 a,
 article.home h2 a,
 article.home h3 a,
 article.home h4 a {
-	color: #f2756a;
+	color: #1248B4;
 }
 article.home h1 a:hover,
 article.home h2 a:hover,
