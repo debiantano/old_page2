@@ -7,7 +7,7 @@ highlighter: rouge
 markdown: kramdown
 disqus: Liodeus
 google_analytics: Liodeus
-title: Liodeus
+title: Debiantano
 
 defaults:
   -
@@ -18,9 +18,9 @@ defaults:
 
 description: OSCP journey with Liodeus !
 author:
-  name: Liodeus
+  name: Debiantano
   email: thibaultgalbourdin@gmail.com
-  github: Liodeus
+  github: debiantano
   linkedin: thibault-galbourdin-9a4998144
   bio: OSCP journey with Liodeus !
   email_md5: 94b2c0c075c4ed839beee2dafbb2ac69
