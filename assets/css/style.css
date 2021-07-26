@@ -128,7 +128,7 @@ article.home h4,
 article.home h5,
 article.home h6 {
 	font-family: 'Ubuntu', sans-serif;
-	color: #f2756a;
+	color: #639EBF;
 }
 
 article.home h1 a,
@@ -141,7 +141,7 @@ article.home h1 a:hover,
 article.home h2 a:hover,
 article.home h3 a:hover,
 article.home h4 a:hover {
-	color: #e74c3c;
+	color: #6687FF;
 }
 
 .author .author-image {
