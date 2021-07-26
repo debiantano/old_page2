@@ -29,3 +29,44 @@ description: "Windows PrivEsc cheatsheet"
   - [Exploit](#exploit)
 - [Startup Aplications](#startup-aplications)
 - [Firewalled Services](#firewalled-services)
+
+# Introduction
+The goal of this cheat sheet is to provide a quick overview of possible attack vectors that can be used to elevate your privileges to the system. For each attack vector, it explains how to detect if a system is vulnerable and gives an example of how to exploit it.   
+
+# Tools
+Before learning about the different attack vectors, I listed some commands for the general privesc enumeration scripts that I used during OSCP. To gain some efficiency, I moved all the scripts into a directory and made them accessible remotely through the samba service or via the web.   
+```
+#host files in current directory through smb
+impacket-smbserver share $(pwd)
+impacket-smbserver -smb2support share $(pwd)   // for Windows 10
+
+#host files in current directory through http
+python -m SimpleHTTPServer 8080
+python3 -m http.server 8080
+```
+
+Below, I listed the different PrivEsc tools and files that I would generally have hosted through the SMB and HTTP server for quick access.
+```
+accesschk64.exe
+accesschk.exe
+accesschk-XP.exe
+Invoke-PowerShellTcp.ps1
+PowerUp.ps1
+SharpUp.exe
+Sherlock.ps1
+windows-exploit-suggester2.py
+winPEASany.exe
+winPEASx64.exe
+winPEASx86.exe
+winbin/ #a copy of windows binaries in /usr/share/windows-binaries/
+    nc64.exe
+    nc.exe
+    plink.exe
+    wget.exe
+    whoami.exe
+    chisel.exe
+```
+
+
+
+
