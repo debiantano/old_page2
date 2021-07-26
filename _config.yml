@@ -16,13 +16,13 @@ defaults:
     values:
       title: Liodeus
 
-description: OSCP journey with Liodeus !
+description: Hack Player/OSWP !
 author:
   name: Debiantano
   email: thibaultgalbourdin@gmail.com
   github: debiantano
   linkedin: thibault-galbourdin-9a4998144
-  bio: OSCP journey with Liodeus !
+  bio: Articulos de hacking - WiFi - CTFs !
   email_md5: 94b2c0c075c4ed839beee2dafbb2ac69
 
 # rss_path: feed.xml
