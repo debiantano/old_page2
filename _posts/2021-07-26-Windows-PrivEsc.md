@@ -121,7 +121,7 @@ You basically need one of the following permissions to the service and then you'
 | WRITE_DAC             | Can reconfigure permissions, leading to SERVICE_CHANGE_CONFIG |
 | WRITE_OWNER           | Can become owner, reconfigure permissions                     |
 | GENERIC_WRITE         | Inherits SERVICE_CHANGE_CONFIG                                |
-| GENERIC_ALL           |Inherits SERVICE_CHANGE_CONFIG                                 |
+| GENERIC_ALL           |Inherits SERVICE_CHANGE_CONFIG                                 |   
 > To elevate privileges the BinPath way, services don't have to be configured to run under LocalSystem. As we can alter the configuration, we can also specify under what privileges it should run.   
 #### Exploit  
 ```
