@@ -247,7 +247,7 @@ tasklist /fi "pid eq <PID>"
 #### Exploit
 For databases, you can gain RCE through the command functionality or find passwords in the database itself.   
 
-When dealing with web apps that are only accessible to the localhost, we can forward them to our kali machine:
+When dealing with web apps that are only accessible to the localhost, we can forward them to our kali machine:   
 ```
 # On machine attack // example 10.10.10.12
 # Start the SSH service
