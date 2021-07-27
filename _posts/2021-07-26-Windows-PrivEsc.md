@@ -5,20 +5,6 @@ tags: [OSCP, Cheatsheet, Windows]
 description: "Windows PrivEsc cheatsheet"
 ---
 
-{% highlight yaml %}
-title: dbyll
-author:  
-  name: yourname  
-  email: youremail  
-  github: asd123  
-  twitter: asd123  
-  pinterest: asd123  
-  linkedin: asd123  
-  resume: asd123  
-  bio: Your stylish,  minimalist theme!  
-  email_md5: md5ofemail  
-{% endhighlight %}
-
 # Table of contents
 
 - [Introduction](#introduction)
