@@ -116,6 +116,7 @@ sc qc daclsvc
 ```   
 You basically need one of the following permissions to the service and then you're good to go:   
 | Permission            | Why good for us?                                              |
+| --------------------- | ------------------------------------------------------------- |
 | SERVICE_CHANGE_CONFIG | Can reconfigure the service binary                            |
 | WRITE_DAC             | Can reconfigure permissions, leading to SERVICE_CHANGE_CONFIG |
 | WRITE_OWNER           | Can become owner, reconfigure permissions                     |
