@@ -46,6 +46,7 @@ code,kbd,pre,samp{
 div.highlight{
   background:#000000;
   border: 1px solid #000000;
+  margin: 10px; 
 }
 pre.highlight{
   width: max-content;
