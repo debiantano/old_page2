@@ -42,11 +42,13 @@ code,kbd,pre,samp{
   font-family:monospace,serif;
   font-size:1em
 }
-
+table{
+  margin-bottom: 12px;
+}
 div.highlight{
   background:#000000;
   border: 1px solid #000000;
-  margin: 10px; 
+  margin: 1em auto 1.1em; 
 }
 pre.highlight{
   width: max-content;
