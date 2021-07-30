@@ -2,7 +2,7 @@
 
 body{
 	color: #000113;
-	background-color: #fff8eb;
+	background-color: #ffffff;
 }
 
 table, th, td {
@@ -136,7 +136,7 @@ article.home h1 a,
 article.home h2 a,
 article.home h3 a,
 article.home h4 a {
-	color: #1248B4;
+	color: #ad0361;
 }
 article.home h1 a:hover,
 article.home h2 a:hover,
