@@ -337,8 +337,9 @@ reg query HKCU /f password /t REG_SZ /s
 
 ## Configuration Files
 
-When programs have to authenticate to other services, the passwords are often stored in the configuration files. The following list contains juicy files that could get us lucky.   
-1. Windows configuration files   
+When programs have to authenticate to other services, the passwords are often stored in the configuration files. The following list contains juicy files that could get us lucky.
+
+- Windows configuration files   
 
 ```
 c:\sysprep.inf
@@ -348,7 +349,7 @@ c:\unattend.xml
 %WINDIR%\Panther\Unattended.xml
 ```
 
-2. Config files of web server
+- Config files of web server
 
 ```
 #search for the file
@@ -356,7 +357,7 @@ C:\inetpub\wwwroot\web.config
 #search for password in following line "connectionString"
 ```
 
-3. VNC config files
+- VNC config files
 
 ```
 dir c:\*vnc.ini /s /b
@@ -380,7 +381,7 @@ grep -i password SiteList.xml
 python mcafee_sitelist_pwd_decrypt.py [encryptedpassw
 ```
 
-5. group policy preference
+- group policy preference
 
 ```
 #getting the file:
@@ -412,7 +413,7 @@ python mcafee_sitelist_pwd_decrypt.py [encryptedpassw
     DataSources\DataSources.xml #Element-Specific Attributes
 ```
 
-6. The getting desperate searches
+- The getting desperate searches
 
 ```
 #find the string 'password' in all files of certain file type
