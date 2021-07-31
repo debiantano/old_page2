@@ -365,7 +365,7 @@ dir c:\*ultravnc.ini /s /b
 dir c:\ /s /b | findstr /si *vnc.ini
 ```
 
-4. McAfee SiteList
+- McAfee SiteList
 
 ```
 #on target
