@@ -6,7 +6,7 @@ exclude: ["README.md"] # files to exclude
 highlighter: rouge
 markdown: kramdown
 disqus: Debiantano
-google_analytics: Debiantano
+google_analytics: debiantano
 title: Debiantano
 
 defaults:
@@ -21,9 +21,9 @@ author:
   name: Debiantano
   email: cromozzc@gmail.com
   github: debiantano
-  linkedin: XXX
+  linkedin: XXXXXX
   bio: Offensive Hacking - WiFi - CTFs!
-  email_md5: 94b2c0c075c4ed839beee2dafbb2ac69
+#  email_md5: 94b2c0c075c4ed839beee2dafbb2ac69
 
 # rss_path: feed.xml
 # categories_path: categories.html
