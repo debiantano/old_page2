@@ -6,8 +6,8 @@ body{
 }
 
 table, th, td {
-  border: 1px solid #ffffff;
-  background-color: #e4e4e4;	
+  border: 2px solid #ffffff;
+  background-color: #e4e4e4;
 }
 
 .sidebar {
@@ -194,4 +194,3 @@ footer {
 ul.dropdown-menu>li>a>i.fa {
     width: 1.3em;
 }
-
