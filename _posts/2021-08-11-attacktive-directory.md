@@ -133,6 +133,8 @@ Interesting services found:
 -----
 
 ### Enumerating samba
+#### smbclient
+
 smbclient: ftp-like client to access SMB/CIFS resources on servers
 
 | argument | description |
