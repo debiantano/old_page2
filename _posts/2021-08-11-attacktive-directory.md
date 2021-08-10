@@ -129,6 +129,7 @@ Interesting services found:
 * 139 (netbios-ssn) Microsoft Windows netbios-ssn
 * 389,3268 (ldap) Microsoft Windows Active Directory LDAP (Domain: spookysec.local0., Site: Default-First-Site-Name)
 * 5985 (winrm)
+
 -----
 
 ### Enumerating samba
