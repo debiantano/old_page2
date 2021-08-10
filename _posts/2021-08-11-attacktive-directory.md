@@ -5,7 +5,7 @@ tags: [THM, AD, Windows]
 description: "Attacktive Directory - TryHackMe"
 ---
 
-# Vulnerable System:
+# Vulnerable System: 10.10.28.119
 
 - [Enumeration](#enumeration)
 - [Foothold](#foothoold)
@@ -738,10 +738,10 @@ ATTACKTIVEDIREC$:des-cbc-md5:1625a7264c8a32b6
 
 -----
 
-# CONEXION VIA RDP
+## Connection via rdp
+Trying to connect via remote desktop. I was able to find that the machine has specified certain policies for which it is not possible.
 
 > ❯ xfreerdp /u:Administrator /pth:0e0363213e37b94221497260b0bcb4fc /v:10.10.191.145
-
 > ❯ xfreerdp /u:a-spooks /pth:0e0363213e37b94221497260b0bcb4fc /v:10.10.191.145
 
 ![desktop](/assets/imgs/attacktive-directory/desktop.png)
