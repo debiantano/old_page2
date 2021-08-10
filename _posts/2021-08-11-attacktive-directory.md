@@ -7,10 +7,18 @@ description: "Attacktive Directory - TryHackMe"
 
 # Vulnerable System: 10.10.28.119
 
+- [Install impacket](#install-impacket)
 - [Enumeration](#enumeration)
-- [Foothold](#foothoold)
-- [Getting reverse shell](#getting-reverse-shell)
-- [Privilege Escalation](#privilege-escalation)
+	* [Nmap](#nmap)
+	* [Enumerating samba](#enumerating-samba)
+- [AS-REP roasting](#as---rep-roasting)
+	* [Enumerating users via kerberos](#enumerating-users-via-kerberos)
+	* [Cracking hash](#cracking-hash)
+		- [Hashcat](#hashcat)
+		- [John The Ripper](#john-the-ripper)
+- [DCSync Attack](#dcsync-attack)
+- [Evil-winrm](#evil-winrm)
+- [Connection via rdp](#connection-via-rdp)
 
 ![logo](/assets/imgs/attacktive-directory/logo.png)
 
@@ -26,9 +34,13 @@ Impacket es una colección de clases de Python para trabajar con protocolos de r
 Impacket se centra en proporcionar acceso programático de bajo nivel a los paquetes y, para algunos protocolos (por ejemplo, **SMB1-3** y **MSRPC**).
 
 > git clone [https://github.com/SecureAuthCorp/impacket.git /opt/impacket](https://github.com/SecureAuthCorp/impacket.git /opt/impacket)
+
 > sudo pip3 install -r /opt/impacket/requirements.txt
+
 > cd /opt/impacket/
+
 > sudo pip3 install .
+
 > sudo python3 setup.py install
 
 ## Enumeration:
@@ -119,7 +131,7 @@ Interesting services found:
 * 5985 (winrm)
 -----
 
-## Enumerating Users via Kerberos
+### Enumerating samba
 smbclient: ftp-like client to access SMB/CIFS resources on servers
 
 | argument | description |
@@ -173,7 +185,7 @@ $krb5asrep$23$svc-admin@SPOOKYSEC.LOCAL:5074d38e8727870e0a5716559eee4785$56dab19
 ```
 
 ### Cracking hash
-#### hashcat
+### hashcat
 
 Searching for the type of hash found.
 
