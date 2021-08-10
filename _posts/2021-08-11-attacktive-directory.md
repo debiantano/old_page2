@@ -316,7 +316,7 @@ mount: mount a filesystem
 | -t       | indicate the filesystem type |
 | -o       | options                      |
 
-> For more information: man mount
+> For more information: ```man mount```.
 
 ```
 ❯ sudo mkdir /mnt/samba
