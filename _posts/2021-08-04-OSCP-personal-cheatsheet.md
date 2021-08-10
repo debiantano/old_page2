@@ -32,6 +32,8 @@ description: "OSCP personal cheatsheet"
 
 - [Zip](#zip)
 
+- [WordPress](#wordpress)
+
 -----
 
 # Samba - 445
@@ -263,3 +265,5 @@ fcrackzip -u -D -p '/usr/share/wordlists/rockyou.txt' <FILE.zip>
 zip2john FILE.zip > zip.john
 john --wordlist=<PASSWORDS_LIST> zip.john
 ```
+
+## WordPress
