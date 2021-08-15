@@ -252,7 +252,7 @@ We make the comparisons indicating the direction of the ESP
 
 The comparisons will be made until we can find all the characters that can obstruct our shellcode that we will generate.
 
-![badchars](/assets/imgs/bof5_oscp(badchars.png)
+![badchars](/assets/imgs/bof5_oscp/badchars.png)
 
 ## Find the right module
 Searching the executable modules with the option that all have the property of **false**.
