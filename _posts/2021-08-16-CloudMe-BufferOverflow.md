@@ -19,7 +19,7 @@ description: "CloudMe - BufferOverflow"
 
 PoC: [ExploitDB](https://www.exploit-db.com/exploits/48389)
 
-## Inreoduction
+## Introduction
 
 Stack buffer overflow is a **memory corruption** vulnerability that occurs when a program writes more data to a buffer located on the stack than what is actually allocated for that buffer, therefore overflowing to a memory address that is outside of the intended data structure.
 
@@ -58,7 +58,7 @@ s.send(buffer)
 
 -----
 
-## Dentifying the EIP offset
+## Identifying the EIP offset
 
 The next required step is to identify which part of the buffer lands in the EIP register, and then modify it and control the flow of program execution. Since all that was sent was a bunch of A's, at the moment there is no way to know which part has overwritten EIP.
 
@@ -77,7 +77,7 @@ modifying the script.
 #!/usr/bin/python3
 import socket,time
 
-buffer=b"aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfaacgaachaaciaacjaacka [...]
+buffer=b"aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfaacgaachaaciaacjaacka [...]"
 
 s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect(("127.0.0.1",8888))
@@ -169,7 +169,7 @@ Restart the application, reattach Immunity Debugger, and run the script:
 
 ![dump](/assets/imgs/cloudme/dump.png)
 
-In this case the only badchar that has been observed is "\ 00"
+In this case the only badchar that has been observed is "\00"
 
 ------
 
@@ -193,7 +193,7 @@ Using the ```!mona find``` to with command to find valid pointers to the JMP ESP
 
 * Not Valid
 
-![/assets/imgs/cloudme/dll_notfound.png]
+!(dll_not_found)[/assets/imgs/cloudme/dll_notfound.png]
 
 * Valid
 
