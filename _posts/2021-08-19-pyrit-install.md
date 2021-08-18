@@ -1,15 +1,19 @@
 ---
-title: Instalación de pyrit en Kali Linux 2021
+layout: post
+title: Pyrit install Kali linux - 2021
+tags: [WiFi, Linux]
+description: Pyrit install Kali linux - 2021
 ---
 
-Algunas caracteristicas que vinieron por defecto en kali
+![logo](/assets/imgs/pyrit_error/logo.png)
 
-❯ python3 -V
-Python 3.9.2
+Recently I was seeing in the forums that many had problems in the installation process of this tool.
 
-❯ python -V
-Python 2.7.18
+Today I will explain how to solve several of these common errors that can occur
 
+It is worth mentioning that I will be using the Kali Linux 2021.2 Operating System but this will also work in previous versions.
+
+```
 ❯ cat /etc/os-release
 PRETTY_NAME="Kali GNU/Linux Rolling"
 NAME="Kali GNU/Linux"
@@ -22,48 +26,65 @@ ANSI_COLOR="1;31"
 HOME_URL="https://www.kali.org/"
 SUPPORT_URL="https://forums.kali.org/"
 BUG_REPORT_URL="https://bugs.kali.org/"
+```
 
-## Pyrit link
-https://github.com/JPaulMora/Pyrit
+Kali Linux comes installed by default with these two versions of python.
+
+```
+❯ python3 -V
+Python 3.9.2
+
+❯ python -V
+Python 2.7.18
+
+```
+
+## Pyrit repository
+First we will clone the Pyrit project.
+
+Link: [https://github.com/JPaulMora/Pyrit](https://github.com/JPaulMora/Pyrit)
+
+```
+❯ git clone https://github.com/JPaulMora/Pyrit
+```
+
+![github](/assets/imgs/pyrit_error/github.png)
 
 -----
 
-Para que vean que estoy instalando desde cero
-Actualmente no tengo pyrit
+## Installation from the wiki
 
-❯ pyrit
-zsh: command not found: pyrit
-pyrit: command not found
+Link: [https://github.com/JPaulMora/Pyrit/wiki](https://github.com/JPaulMora/Pyrit/wiki)
 
-----
-Me clono el repositorio de pyrit
+Then the only thing I do is follow the guide that the page itself shows us.
 
-❯ git clone https://github.com/JPaulMora/Pyrit
-Clonando en 'Pyrit'...
-remote: Enumerating objects: 2127, done.
-remote: Total 2127 (delta 0), reused 0 (delta 0), pack-reused 2127
-Recibiendo objetos: 100% (2127/2127), 4.60 MiB | 3.16 MiB/s, listo.
-Resolviendo deltas: 100% (1453/1453), listo.
+![wiki](/assets/imgs/pyrit_error/wiki.png)
 
-## Instalacion de prit desde la wiki
-https://github.com/JPaulMora/Pyrit/wiki
+I install ```psycopg2``` and ```scapy``` but these packages are already installed by default, so for now everything is fine.
 
+```
 ❯ sudo pip install psycopg2
-[sudo] password for user: 
+[sudo] password for user:
 Requirement already satisfied: psycopg2 in /usr/lib/python3/dist-packages (2.8.6)
+```
 
+```
 ❯ sudo pip install scapy
 Requirement already satisfied: scapy in /usr/lib/python3/dist-packages (2.4.4)
+```
 
+We continue with the guide.
 
------
-
+```
 ❯ cd Pyrit
 ❯ python setup.py clean
 running clean
 
-Aqui es donde empieza los problemas
+```
 
+And this is where the problems of the damn pyrit begin, which has caused so many headaches for many.
+
+```
 ❯ python setup.py build
 running build
 running build_py
@@ -95,107 +116,23 @@ cpyrit/_cpyrit_cpu.c:32:10: fatal error: Python.h: No existe el fichero o el dir
       |          ^~~~~~~~~~
 compilation terminated.
 error: command 'x86_64-linux-gnu-gcc' failed with exit status 1
+```
 
------
-❯ pyrit
-zsh: command not found: pyrit
+So looking for this problem in the pyrit issues I see that many others had the same error.
 
+![failedx86](/assets/imgs/pyrit_error/failedx86.png)
 
-Si visualizamos la version de scapy
-❯ scapy
-INFO: Can't import PyX. Won't be able to use psdump() or pdfdump().
-                                      
-                     aSPY//YASa       
-             apyyyyCY//////////YCa       |
-            sY//////YSpcs  scpCY//Pp     | Welcome to Scapy
- ayp ayyyyyyySCP//Pp           syY//C    | Version 2.4.4
- AYAsAYYYYYYYY///Ps              cY//S   |
-         pCCCCY//p          cSSps y//Y   | https://github.com/secdev/scapy
-         SPPPP///a          pP///AC//Y   |
-              A//A            cyP////C   | Have fun!
-              p///Ac            sC///a   |
-              P////YCpc           A//A   | Craft packets before they craft
-       scccccp///pSP///p          p//Y   | you.
-      sY/////////y  caa           S//P   |                      -- Socrate
-       cayCyayP//Ya              pY/Ya   |
-        sY/PsY////YCc          aC//Yp 
-         sc  sccaCY//PCypaapyCP//YSs  
-                  spCPY//////YPSps    
-                       ccaacs         
+This is because we have not yet been able to install the dependencies for this tool. This is solved by applying the following command.
 
+Link issue: [https://github.com/JPaulMora/Pyrit/issues/594](https://github.com/JPaulMora/Pyrit/issues/594)
 
------
-Dentro de la carpeta pyrit
-
-❯ grep -r -i -l "scapy" 2>/dev/null
-pyrit_cli.py
-test/test_pyrit.py
-build/lib.linux-x86_64-2.7/pyrit_cli.py
-build/lib.linux-x86_64-2.7/cpyrit/util.py
-build/lib.linux-x86_64-2.7/cpyrit/pckttools.py
-cpyrit/util.py
-cpyrit/pckttools.py
-
-❯ cat pyrit_cli.py | grep -i "scapy"
-                    raise PyritRuntimeError("Scapy 2.x is required to use " \
-
-
-------
-instalandando scapy 2.3.2
-❯ pip install scapy==2.3.2
-Collecting scapy==2.3.2
-  Downloading scapy-2.3.2.tar.gz (1.1 MB)
-     |████████████████████████████████| 1.1 MB 10.0 MB/s 
-    ERROR: Command errored out with exit status 1:
-     command: /usr/bin/python3 -c 'import sys, setuptools, tokenize; sys.argv[0] = '"'"'/tmp/pip-install-bum2u58w/scapy_024a50b11e8547cca824fac782c3f89d/setup.py'"'"'; __file__='"'"'/tmp/pip-install-bum2u58w/scapy_024a50b11e8547cca824fac782c3f89d/setup.py'"'"';f=getattr(tokenize, '"'"'open'"'"', open)(__file__);code=f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' egg_info --egg-base /tmp/pip-pip-egg-info-9u72r63q
-         cwd: /tmp/pip-install-bum2u58w/scapy_024a50b11e8547cca824fac782c3f89d/
-    Complete output (6 lines):
-    Traceback (most recent call last):
-      File "<string>", line 1, in <module>
-      File "/tmp/pip-install-bum2u58w/scapy_024a50b11e8547cca824fac782c3f89d/setup.py", line 35
-        os.chmod(fname,0755)
-                          ^
-    SyntaxError: leading zeros in decimal integer literals are not permitted; use an 0o prefix for octal integers
-    ----------------------------------------
-WARNING: Discarding https://files.pythonhosted.org/packages/6d/72/c055abd32bcd4ee6b36ef8e9ceccc2e242dea9b6c58fdcf2e8fd005f7650/scapy-2.3.2.tar.gz#sha256=a9059ced6e1ded0565527c212f6ae4c735f4245d0f5f2d7313c4a6049b005cd8 (from https://pypi.org/simple/scapy/). Command errored out with exit status 1: python setup.py egg_info Check the logs for full command output.
-ERROR: Could not find a version that satisfies the requirement scapy==2.3.2
-ERROR: No matching distribution found for scapy==2.3.2
-
-## DESCARGA
-❯ wget https://files.pythonhosted.org/packages/6d/72/c055abd32bcd4ee6b36ef8e9ceccc2e242dea9b6c58fdcf2e8fd005f7650/scapy-2.3.2.tar.gz
---2021-08-18 13:16:34--  https://files.pythonhosted.org/packages/6d/72/c055abd32bcd4ee6b36ef8e9ceccc2e242dea9b6c58fdcf2e8fd005f7650/scapy-2.3.2.tar.gz
-Resolviendo files.pythonhosted.org (files.pythonhosted.org)... 151.101.1.63, 151.101.65.63, 151.101.129.63, ...
-Conectando con files.pythonhosted.org (files.pythonhosted.org)[151.101.1.63]:443... conectado.
-Petición HTTP enviada, esperando respuesta... 200 OK
-Longitud: 1130191 (1,1M) [application/octet-stream]
-Grabando a: «scapy-2.3.2.tar.gz»
-
-scapy-2.3.2.tar.gz                              100%[=====================================================================================================>]   1,08M  6,78MB/s    en 0,2s
-
-2021-08-18 13:16:34 (6,78 MB/s) - «scapy-2.3.2.tar.gz» guardado [1130191/1130191]
-
-
-❯ gunzip scapy-2.3.2.tar.gz
-❯ tar -xf scapy-2.3.2.tar
-❯ ls
- scapy-2.3.2   scapy-2.3.2.tar
-
-❯ sudo python setup.py install
-
-❯ scapy
-INFO: Can't import python gnuplot wrapper . Won't be able to plot.
-INFO: Can't import PyX. Won't be able to use psdump() or pdfdump().
-WARNING: No route found for IPv6 destination :: (no default route?)
-INFO: Can't import python Crypto lib. Won't be able to decrypt WEP.
-INFO: Can't import python Crypto lib. Disabled certificate manipulation tools
-Welcome to Scapy (2.3.2)
-
-
-----
-
+```
 ❯ sudo apt-get install python3 python-dev python3-dev build-essential libssl-dev libffi-dev libxml2-dev libxslt1-dev zlib1g-dev
+```
 
------
+Let's build pyrit again
+
+```
 ❯ python setup.py build
 running build
 running build_py
@@ -214,9 +151,19 @@ cpyrit/_cpyrit_cpu.c:40:10: fatal error: pcap.h: No existe el fichero o el direc
       |          ^~~~~~~~
 compilation terminated.
 error: command 'x86_64-linux-gnu-gcc' failed with exit status 1
+```
 
------
-> https://github.com/JPaulMora/Pyrit/issues/594
+Sparkly! What do you think :(
+
+## Libpcap dependency
+
+We go back to the [issue](https://github.com/JPaulMora/Pyrit/issues/594) and find a user who has the same problems.
+
+![libpcap](/assets/imgs/pyrit_error/libcap.png)
+
+The error arises because we have not yet fully complied with the dependencies.
+
+We execute the following command.
 
 ❯ sudo apt-get install libpcap-dev                                                                    
 Leyendo lista de paquetes... Hecho
@@ -266,7 +213,7 @@ ormat-security -fPIC -I/usr/include/python2.7 -c cpyrit/_cpyrit_cpu.c -o build/t
 x86_64-linux-gnu-gcc -pthread -fno-strict-aliasing -Wdate-time -D_FORTIFY_SOURCE=2 -g -ffile-prefix-map=/build/python2.7-vgIf7a/python2.7-2.7.18=. -fstack-protector-strong -Wformat -Werror=f
 ormat-security -fPIC -I/usr/include/python2.7 -c cpyrit/_cpyrit_cpu_sse2.S -o build/temp.linux-x86_64-2.7/cpyrit/_cpyrit_cpu_sse2.o -Wall -fno-strict-aliasing -DVERSION="0.5.1" -maes -mpclmu
 l                                              
-x86_64-linux-gnu-gcc -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-z,relro -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -Wdate-time -D_FORTIFY_SOURCE=2 -g 
+x86_64-linux-gnu-gcc -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-z,relro -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -Wdate-time -D_FORTIFY_SOURCE=2 -g
 -ffile-prefix-map=/build/python2.7-vgIf7a/python2.7-2.7.18=. -fstack-protector-strong -Wformat -Werror=format-security -Wl,-z,relro -Wdate-time -D_FORTIFY_SOURCE=2 -g -ffile-prefix-map=/buil
 d/python2.7-vgIf7a/python2.7-2.7.18=. -fstack-protector-strong -Wformat -Werror=format-security -fPIC build/temp.linux-x86_64-2.7/cpyrit/_cpyrit_cpu.o build/temp.linux-x86_64-2.7/cpyrit/_cpy
 rit_cpu_sse2.o -lcrypto -lpcap -o build/lib.linux-x86_64-2.7/cpyrit/_cpyrit_cpu.so             
@@ -381,7 +328,7 @@ ormat-security -fPIC -I/usr/include/python2.7 -c cpyrit/_cpyrit_cpu.c -o build/t
 x86_64-linux-gnu-gcc -pthread -fno-strict-aliasing -Wdate-time -D_FORTIFY_SOURCE=2 -g -ffile-prefix-map=/build/python2.7-vgIf7a/python2.7-2.7.18=. -fstack-protector-strong -Wformat -Werror=f
 ormat-security -fPIC -I/usr/include/python2.7 -c cpyrit/_cpyrit_cpu_sse2.S -o build/temp.linux-x86_64-2.7/cpyrit/_cpyrit_cpu_sse2.o -Wall -fno-strict-aliasing -DVERSION="0.5.1" -maes -mpclmu
 l                                                                                              
-x86_64-linux-gnu-gcc -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-z,relro -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -Wdate-time -D_FORTIFY_SOURCE=2 -g 
+x86_64-linux-gnu-gcc -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-z,relro -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -Wdate-time -D_FORTIFY_SOURCE=2 -g
 -ffile-prefix-map=/build/python2.7-vgIf7a/python2.7-2.7.18=. -fstack-protector-strong -Wformat -Werror=format-security -Wl,-z,relro -Wdate-time -D_FORTIFY_SOURCE=2 -g -ffile-prefix-map=/buil
 d/python2.7-vgIf7a/python2.7-2.7.18=. -fstack-protector-strong -Wformat -Werror=format-security -fPIC build/temp.linux-x86_64-2.7/cpyrit/_cpyrit_cpu.o build/temp.linux-x86_64-2.7/cpyrit/_cpy
 rit_cpu_sse2.o -lcrypto -lpcap -o build/lib.linux-x86_64-2.7/cpyrit/_cpyrit_cpu.so
@@ -395,16 +342,16 @@ running install_scripts
 changing mode of /usr/local/bin/pyrit to 755                                                   
 running install_egg_info                                                                       
 Removing /usr/local/lib/python2.7/dist-packages/pyrit-0.5.1.egg-info           
-Writing /usr/local/lib/python2.7/dist-packages/pyrit-0.5.1.egg-info 
+Writing /usr/local/lib/python2.7/dist-packages/pyrit-0.5.1.egg-info
 
 ------
 ❯ pyrit                                                                               
 Pyrit 0.5.1 (C) 2008-2011 Lukas Lueg - 2015 John Mora                                 
 https://github.com/JPaulMora/Pyrit                                                    
 This code is distributed under the GNU General Public License v3+                     
-                                                                                      
+
 Usage: pyrit [options] command                                                        
-                                                                                      
+
 Recognized options:                                                                   
   -b               : Filters AccessPoint by BSSID                                     
   -e               : Filters AccessPoint by ESSID                                     
@@ -415,7 +362,7 @@ Recognized options:
   -u               : URL of the storage-system to use                             
   --all-handshakes : Use all handshakes instead of the best one               
   --aes            : Use AES                                                          
-                                                                                      
+
 Recognized commands:                                                                  
   analyze                 : Analyze a packet-capture file
   attack_batch            : Attack a handshake with PMKs/passwords from the db
@@ -479,3 +426,106 @@ Parsed 568 packets (568 802.11-packets), got 9 AP(s)
 #8: AccessPoint 00:14:bf:81:7a:97 ('Hardrock'):
 #9: AccessPoint 00:0f:66:4a:18:b1 ('Narra'):
 
+
+❯ pyrit
+zsh: command not found: pyrit
+
+
+
+
+
+
+
+
+
+Si visualizamos la version de scapy
+❯ scapy
+INFO: Can't import PyX. Won't be able to use psdump() or pdfdump().
+
+                     aSPY//YASa       
+             apyyyyCY//////////YCa       |
+            sY//////YSpcs  scpCY//Pp     | Welcome to Scapy
+ ayp ayyyyyyySCP//Pp           syY//C    | Version 2.4.4
+ AYAsAYYYYYYYY///Ps              cY//S   |
+         pCCCCY//p          cSSps y//Y   | https://github.com/secdev/scapy
+         SPPPP///a          pP///AC//Y   |
+              A//A            cyP////C   | Have fun!
+              p///Ac            sC///a   |
+              P////YCpc           A//A   | Craft packets before they craft
+       scccccp///pSP///p          p//Y   | you.
+      sY/////////y  caa           S//P   |                      -- Socrate
+       cayCyayP//Ya              pY/Ya   |
+        sY/PsY////YCc          aC//Yp
+         sc  sccaCY//PCypaapyCP//YSs  
+                  spCPY//////YPSps    
+                       ccaacs         
+
+
+-----
+Dentro de la carpeta pyrit
+
+❯ grep -r -i -l "scapy" 2>/dev/null
+pyrit_cli.py
+test/test_pyrit.py
+build/lib.linux-x86_64-2.7/pyrit_cli.py
+build/lib.linux-x86_64-2.7/cpyrit/util.py
+build/lib.linux-x86_64-2.7/cpyrit/pckttools.py
+cpyrit/util.py
+cpyrit/pckttools.py
+
+❯ cat pyrit_cli.py | grep -i "scapy"
+                    raise PyritRuntimeError("Scapy 2.x is required to use " \
+
+
+------
+instalandando scapy 2.3.2
+❯ pip install scapy==2.3.2
+Collecting scapy==2.3.2
+  Downloading scapy-2.3.2.tar.gz (1.1 MB)
+     |████████████████████████████████| 1.1 MB 10.0 MB/s
+    ERROR: Command errored out with exit status 1:
+     command: /usr/bin/python3 -c 'import sys, setuptools, tokenize; sys.argv[0] = '"'"'/tmp/pip-install-bum2u58w/scapy_024a50b11e8547cca824fac782c3f89d/setup.py'"'"'; __file__='"'"'/tmp/pip-install-bum2u58w/scapy_024a50b11e8547cca824fac782c3f89d/setup.py'"'"';f=getattr(tokenize, '"'"'open'"'"', open)(__file__);code=f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' egg_info --egg-base /tmp/pip-pip-egg-info-9u72r63q
+         cwd: /tmp/pip-install-bum2u58w/scapy_024a50b11e8547cca824fac782c3f89d/
+    Complete output (6 lines):
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+      File "/tmp/pip-install-bum2u58w/scapy_024a50b11e8547cca824fac782c3f89d/setup.py", line 35
+        os.chmod(fname,0755)
+                          ^
+    SyntaxError: leading zeros in decimal integer literals are not permitted; use an 0o prefix for octal integers
+    ----------------------------------------
+WARNING: Discarding https://files.pythonhosted.org/packages/6d/72/c055abd32bcd4ee6b36ef8e9ceccc2e242dea9b6c58fdcf2e8fd005f7650/scapy-2.3.2.tar.gz#sha256=a9059ced6e1ded0565527c212f6ae4c735f4245d0f5f2d7313c4a6049b005cd8 (from https://pypi.org/simple/scapy/). Command errored out with exit status 1: python setup.py egg_info Check the logs for full command output.
+ERROR: Could not find a version that satisfies the requirement scapy==2.3.2
+ERROR: No matching distribution found for scapy==2.3.2
+
+## DESCARGA
+❯ wget https://files.pythonhosted.org/packages/6d/72/c055abd32bcd4ee6b36ef8e9ceccc2e242dea9b6c58fdcf2e8fd005f7650/scapy-2.3.2.tar.gz
+--2021-08-18 13:16:34--  https://files.pythonhosted.org/packages/6d/72/c055abd32bcd4ee6b36ef8e9ceccc2e242dea9b6c58fdcf2e8fd005f7650/scapy-2.3.2.tar.gz
+Resolviendo files.pythonhosted.org (files.pythonhosted.org)... 151.101.1.63, 151.101.65.63, 151.101.129.63, ...
+Conectando con files.pythonhosted.org (files.pythonhosted.org)[151.101.1.63]:443... conectado.
+Petición HTTP enviada, esperando respuesta... 200 OK
+Longitud: 1130191 (1,1M) [application/octet-stream]
+Grabando a: «scapy-2.3.2.tar.gz»
+
+scapy-2.3.2.tar.gz                              100%[=====================================================================================================>]   1,08M  6,78MB/s    en 0,2s
+
+2021-08-18 13:16:34 (6,78 MB/s) - «scapy-2.3.2.tar.gz» guardado [1130191/1130191]
+
+
+❯ gunzip scapy-2.3.2.tar.gz
+❯ tar -xf scapy-2.3.2.tar
+❯ ls
+ scapy-2.3.2   scapy-2.3.2.tar
+
+❯ sudo python setup.py install
+
+❯ scapy
+INFO: Can't import python gnuplot wrapper . Won't be able to plot.
+INFO: Can't import PyX. Won't be able to use psdump() or pdfdump().
+WARNING: No route found for IPv6 destination :: (no default route?)
+INFO: Can't import python Crypto lib. Won't be able to decrypt WEP.
+INFO: Can't import python Crypto lib. Disabled certificate manipulation tools
+Welcome to Scapy (2.3.2)
+
+
+----
