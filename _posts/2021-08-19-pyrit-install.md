@@ -5,6 +5,12 @@ tags: [WiFi, Linux]
 description: Pyrit install Kali linux - 2021
 ---
 
+- [Installation from the wiki](#installation-from-the-wiki)
+- [Libpcap dependency](#libpcap-dependency)
+- [Error aesni_key](#error-aesni_key)
+- [Setup Install](#setup-install)
+- [Pyrit in action](#pyrit-in-action)
+
 ![logo](/assets/imgs/pyrit_error/logo.png)
 
 Recently I was seeing in the forums that many had problems in the installation process of this tool.
@@ -165,6 +171,7 @@ The error arises because we have not yet fully complied with the dependencies.
 
 We execute the following command.
 
+```
 ❯ sudo apt-get install libpcap-dev                                                                    
 Leyendo lista de paquetes... Hecho
 Creando árbol de dependencias... Hecho                                                                
@@ -200,9 +207,11 @@ Procesando disparadores para sgml-base (1.30) ...
 Procesando disparadores para kali-menu (2021.2.3) ...
 Configurando libpcap0.8-dev:amd64 (1.10.0-2) ...
 Configurando libpcap-dev:amd64 (1.10.0-2) ...
+```
 
+We build again
 
------
+```
 ❯ python setup.py build
 running build
 running build_py
@@ -221,9 +230,9 @@ running build_scripts
 creating build/scripts-2.7
 copying and adjusting pyrit -> build/scripts-2.7
 changing mode of build/scripts-2.7/pyrit from 644 to 755
+```
 
-
------
+```
 ❯ sudo python setup.py install
 running install
 running build
@@ -257,9 +266,19 @@ copying build/scripts-2.7/pyrit -> /usr/local/bin
 changing mode of /usr/local/bin/pyrit to 755
 running install_egg_info
 Writing /usr/local/lib/python2.7/dist-packages/pyrit-0.5.1.egg-info
+```
 
------
-## PYrit
+------
+
+## Error aesni_key
+
+Everything seems to have worked. However we still get another error.
+To solve this problem we will need to comment or remove the lines from two pyrit files.
+
+Everything seems to have worked.
+However we still get another error
+
+```
 ❯ pyrit
 Traceback (most recent call last):
   File "/usr/local/bin/pyrit", line 4, in <module>
@@ -271,30 +290,33 @@ Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/cpyrit/util.py", line 54, in <module>
     import _cpyrit_cpu
 ImportError: /usr/local/lib/python2.7/dist-packages/cpyrit/_cpyrit_cpu.so: undefined symbol: aesni_key
+```
 
--------------
-## COMENTAR LINEAS
-❯ nano cpyrit/cpufeatures.h (linea 37)
+You can find the thread of this problem [here](https://github.com/JPaulMora/Pyrit/issues/591).
+
+Inside the Pyrit folder we edit the file **cpyrit/cpufeatures.h** and delete line 37.
+
+```
+❯ nano cpyrit/cpufeatures.h
+```
+
+```
 34 #endif
 35
 36 #if (defined(__AES__) && defined(__PCLMUL__))
-37     #define COMPILE_AESNI
+[delete line 37]
 38 #endif
 39
 40 #endif /* CPUFEATURES */
-41
+```
 
-34 #endif
-35
-36 #if (defined(__AES__) && defined(__PCLMUL__))
-37 //    #define COMPILE_AESNI
-38 #endif
-39
-40 #endif /* CPUFEATURES */
-41
+Next we will edit the file **cpyrit/_cpyrit_cpu.c** and we will eliminate line 1080 to 1143
 
------
-nano cpyrit/_cpyrit_cpu.c (1080-1143)
+```
+nano cpyrit/_cpyrit_cpu.c
+```
+
+```
 1079 /*
 1080 #ifdef COMPILE_AESNI
 1081     inline __m128i
@@ -304,7 +326,7 @@ nano cpyrit/_cpyrit_cpu.c (1080-1143)
 1085
 1086         b = _mm_shuffle_epi32(b, 255);
 1087         t = _mm_slli_si128(a, 4);
-[...]
+[delete lines 1080-1143]
 1137             if (memcmp(crib, S0, 6) == 0)
 1138                 return i;
 1139         }
@@ -315,8 +337,15 @@ nano cpyrit/_cpyrit_cpu.c (1080-1143)
 1144 */
 1145 PyDoc_STRVAR(CCMPCracker_solve__doc__,
 1146              "solve(object) -> solution or None\n\n"
+```
 
------
+------
+
+## Setup Install
+
+With that it would be solved, we just rerun the pyrit installation.
+
+```
 ❯ sudo python setup.py install
 running install     
 running build                                                                                  
@@ -343,8 +372,11 @@ changing mode of /usr/local/bin/pyrit to 755
 running install_egg_info                                                                       
 Removing /usr/local/lib/python2.7/dist-packages/pyrit-0.5.1.egg-info           
 Writing /usr/local/lib/python2.7/dist-packages/pyrit-0.5.1.egg-info
+```
 
-------
+## Pyrit in action
+
+```
 ❯ pyrit                                                                               
 Pyrit 0.5.1 (C) 2008-2011 Lukas Lueg - 2015 John Mora                                 
 https://github.com/JPaulMora/Pyrit                                                    
@@ -391,21 +423,14 @@ Recognized commands:
   strip                   : Strip packet-capture files to the relevant packets        
   stripLive               : Capture relevant packets from a live capture-source       
   verify                  : Verify 10% of the results by recomputation                
-
------
-❯ cd test
-❯ ls
- dict.gz   test_pyrit.py   wpa2psk-2WIRE972.dump.gz   wpa2psk-linksys.dump.gz   wpa2psk-MOM1.dump.gz   wpa2psk-Red_Apple.dump.gz   wpapsk-linksys.dump.gz   wpapsk-virgin_broadband.dump.gz
-❯ gunzip *
-gzip: test_pyrit.py: unknown suffix -- ignored
-❯ ls
- dict   test_pyrit.py   wpa2psk-2WIRE972.dump   wpa2psk-linksys.dump   wpa2psk-MOM1.dump   wpa2psk-Red_Apple.dump   wpapsk-linksys.dump   wpapsk-virgin_broadband.dump
+```
 
 
-------
-## probando
-❯ file wpa2psk-2WIRE972.dump
-wpa2psk-2WIRE972.dump: pcap capture file, microsecond ts (little-endian) - version 2.4 (802.11, capture length 65535)
+If we go to the test folder and unzip the ```.gz``` we will see some capture files.
+
+So let's try to analyze as proof that the installation has been successful.
+
+```
 ❯ pyrit -r wpa2psk-2WIRE972.dump analyze
 Pyrit 0.5.1 (C) 2008-2011 Lukas Lueg - 2015 John Mora
 https://github.com/JPaulMora/Pyrit
@@ -425,107 +450,4 @@ Parsed 568 packets (568 802.11-packets), got 9 AP(s)
 #7: AccessPoint 00:1f:b3:9f:2a:a1 ('Carnegie339'):
 #8: AccessPoint 00:14:bf:81:7a:97 ('Hardrock'):
 #9: AccessPoint 00:0f:66:4a:18:b1 ('Narra'):
-
-
-❯ pyrit
-zsh: command not found: pyrit
-
-
-
-
-
-
-
-
-
-Si visualizamos la version de scapy
-❯ scapy
-INFO: Can't import PyX. Won't be able to use psdump() or pdfdump().
-
-                     aSPY//YASa       
-             apyyyyCY//////////YCa       |
-            sY//////YSpcs  scpCY//Pp     | Welcome to Scapy
- ayp ayyyyyyySCP//Pp           syY//C    | Version 2.4.4
- AYAsAYYYYYYYY///Ps              cY//S   |
-         pCCCCY//p          cSSps y//Y   | https://github.com/secdev/scapy
-         SPPPP///a          pP///AC//Y   |
-              A//A            cyP////C   | Have fun!
-              p///Ac            sC///a   |
-              P////YCpc           A//A   | Craft packets before they craft
-       scccccp///pSP///p          p//Y   | you.
-      sY/////////y  caa           S//P   |                      -- Socrate
-       cayCyayP//Ya              pY/Ya   |
-        sY/PsY////YCc          aC//Yp
-         sc  sccaCY//PCypaapyCP//YSs  
-                  spCPY//////YPSps    
-                       ccaacs         
-
-
------
-Dentro de la carpeta pyrit
-
-❯ grep -r -i -l "scapy" 2>/dev/null
-pyrit_cli.py
-test/test_pyrit.py
-build/lib.linux-x86_64-2.7/pyrit_cli.py
-build/lib.linux-x86_64-2.7/cpyrit/util.py
-build/lib.linux-x86_64-2.7/cpyrit/pckttools.py
-cpyrit/util.py
-cpyrit/pckttools.py
-
-❯ cat pyrit_cli.py | grep -i "scapy"
-                    raise PyritRuntimeError("Scapy 2.x is required to use " \
-
-
-------
-instalandando scapy 2.3.2
-❯ pip install scapy==2.3.2
-Collecting scapy==2.3.2
-  Downloading scapy-2.3.2.tar.gz (1.1 MB)
-     |████████████████████████████████| 1.1 MB 10.0 MB/s
-    ERROR: Command errored out with exit status 1:
-     command: /usr/bin/python3 -c 'import sys, setuptools, tokenize; sys.argv[0] = '"'"'/tmp/pip-install-bum2u58w/scapy_024a50b11e8547cca824fac782c3f89d/setup.py'"'"'; __file__='"'"'/tmp/pip-install-bum2u58w/scapy_024a50b11e8547cca824fac782c3f89d/setup.py'"'"';f=getattr(tokenize, '"'"'open'"'"', open)(__file__);code=f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' egg_info --egg-base /tmp/pip-pip-egg-info-9u72r63q
-         cwd: /tmp/pip-install-bum2u58w/scapy_024a50b11e8547cca824fac782c3f89d/
-    Complete output (6 lines):
-    Traceback (most recent call last):
-      File "<string>", line 1, in <module>
-      File "/tmp/pip-install-bum2u58w/scapy_024a50b11e8547cca824fac782c3f89d/setup.py", line 35
-        os.chmod(fname,0755)
-                          ^
-    SyntaxError: leading zeros in decimal integer literals are not permitted; use an 0o prefix for octal integers
-    ----------------------------------------
-WARNING: Discarding https://files.pythonhosted.org/packages/6d/72/c055abd32bcd4ee6b36ef8e9ceccc2e242dea9b6c58fdcf2e8fd005f7650/scapy-2.3.2.tar.gz#sha256=a9059ced6e1ded0565527c212f6ae4c735f4245d0f5f2d7313c4a6049b005cd8 (from https://pypi.org/simple/scapy/). Command errored out with exit status 1: python setup.py egg_info Check the logs for full command output.
-ERROR: Could not find a version that satisfies the requirement scapy==2.3.2
-ERROR: No matching distribution found for scapy==2.3.2
-
-## DESCARGA
-❯ wget https://files.pythonhosted.org/packages/6d/72/c055abd32bcd4ee6b36ef8e9ceccc2e242dea9b6c58fdcf2e8fd005f7650/scapy-2.3.2.tar.gz
---2021-08-18 13:16:34--  https://files.pythonhosted.org/packages/6d/72/c055abd32bcd4ee6b36ef8e9ceccc2e242dea9b6c58fdcf2e8fd005f7650/scapy-2.3.2.tar.gz
-Resolviendo files.pythonhosted.org (files.pythonhosted.org)... 151.101.1.63, 151.101.65.63, 151.101.129.63, ...
-Conectando con files.pythonhosted.org (files.pythonhosted.org)[151.101.1.63]:443... conectado.
-Petición HTTP enviada, esperando respuesta... 200 OK
-Longitud: 1130191 (1,1M) [application/octet-stream]
-Grabando a: «scapy-2.3.2.tar.gz»
-
-scapy-2.3.2.tar.gz                              100%[=====================================================================================================>]   1,08M  6,78MB/s    en 0,2s
-
-2021-08-18 13:16:34 (6,78 MB/s) - «scapy-2.3.2.tar.gz» guardado [1130191/1130191]
-
-
-❯ gunzip scapy-2.3.2.tar.gz
-❯ tar -xf scapy-2.3.2.tar
-❯ ls
- scapy-2.3.2   scapy-2.3.2.tar
-
-❯ sudo python setup.py install
-
-❯ scapy
-INFO: Can't import python gnuplot wrapper . Won't be able to plot.
-INFO: Can't import PyX. Won't be able to use psdump() or pdfdump().
-WARNING: No route found for IPv6 destination :: (no default route?)
-INFO: Can't import python Crypto lib. Won't be able to decrypt WEP.
-INFO: Can't import python Crypto lib. Disabled certificate manipulation tools
-Welcome to Scapy (2.3.2)
-
-
-----
+```
