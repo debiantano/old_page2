@@ -64,7 +64,23 @@ In this example we are accessing a local page which would not be accessible from
 
 ## LFI
 
+### Log Poisoning apache
+
+![apache_log](/assets/imgs/dvwa2/apache_log.png)
+
+### Log Poisoning ssh
+
+### Log Poisoning ftp
+
+### Log poisoning smtp
+
 ## RFI
+
+![rfi](/assets/imgs/dvwa2/rfi.png)
+
+![phpinfo](/assets/imgs/dvwa2/phpinfo.png)
+
+![shell](/assets/imgs/dvwa2/shell.png)
 
 ### shell.php
 <?php
