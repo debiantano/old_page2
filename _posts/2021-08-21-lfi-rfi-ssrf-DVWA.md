@@ -15,8 +15,10 @@ description: lfi, rfi, ssrf - DVWA
 - [RFI](#rfi)
 
 
+## Configuration
+In order to practice all the attacks shown we must have previously installed the [**dvwa**](https://dvwa.co.uk/) application.
 
-## Enabling function
+### Enabling function
 ```allow_url_fopen:``` It can be used to retrieve data from remote servers or websites. However, if used incorrectly, this feature can compromise the security of your site.
 
 ```allow_url_include:``` allows a programmer to include a remote file (such as PHP code) using a URL rather than a local file path. Use of this indicates serious design flaws.
@@ -25,7 +27,7 @@ We will have to give certain permissions for the RFI, LFI and SSRF attack to be 
 
 File path: /etc/php7/apache2/php.ini
 
-``````
+```
  851 ;;;;;;;;;;;;;;;;;;
  852 ; Fopen wrappers ;
  853 ;;;;;;;;;;;;;;;;;;
@@ -39,6 +41,30 @@ File path: /etc/php7/apache2/php.ini
  861 allow_url_include = On
  862
 ```
+
+We start the **apache2** and **mysql** services.
+
+```
+> service apache2 start
+> sudo service mysql start
+```
+
+## SSRF
+In computer security, **server Side Request Forgery** is a type of exploit in which an attacker abuses the functionality of a server and causes it to access or manipulate information within that server that would not otherwise be directly accessible. for the attacker
+
+We go to the option **Inclusiond e archivos**. Later pinchmoa in ```file1.php```.
+
+![file_inclusion](/assets/imgs/dvwa2/file_inclusion.png)
+
+In this example we are accessing a local page which would not be accessible from another device.
+
+![ssrf](/assets/imgs/dvwa2/ssrf.png)
+
+
+
+## LFI
+
+## RFI
 
 ### shell.php
 <?php
