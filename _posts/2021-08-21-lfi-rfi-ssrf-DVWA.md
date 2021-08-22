@@ -17,7 +17,7 @@ description: lfi, rfi, ssrf - DVWA
 
 
 ## Enabling function
-```âllow_url_fopen:``` It can be used to retrieve data from remote servers or websites. However, if used incorrectly, this feature can compromise the security of your site.
+```allow_url_fopen:``` It can be used to retrieve data from remote servers or websites. However, if used incorrectly, this feature can compromise the security of your site.
 
 ```allow_url_include:``` allows a programmer to include a remote file (such as PHP code) using a URL rather than a local file path. Use of this indicates serious design flaws.
 
