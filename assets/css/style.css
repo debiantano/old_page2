@@ -35,7 +35,7 @@ table, th, td {
 a.nav-link {
 	padding-bottom: 5px;
 	padding-top: 7px;
-	color: rgb(255, 254, 235);
+	color: rgb(0 0 0);
 }
 a.nav-link i{
 	font-size: 16px;
